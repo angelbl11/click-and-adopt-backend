@@ -4,148 +4,236 @@ const { hash, compare } = require("bcryptjs");
 const { validateRegister } = require("../../Auth/ValidateRegister");
 const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
 const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
-
+const { GraphQLUpload } = require("graphql-upload");
+const path = require("path");
+const fs = require("fs");
 module.exports = {
-	resolvers: {
-		Query: {
-			sayHi: () => {
-				return "Hello world";
-			},
-		},
+  resolvers: {
+    Upload: GraphQLUpload,
+    Query: {
+      sayHi: () => {
+        return "Hello world";
+      },
 
-		Mutation: {
-			register: async (parent, { registerInput }, context, info) => {
-				const { account, age, email, fullName } = registerInput;
-				let { password } = registerInput;
+      getAdopterInfo: async (parent, { id }, context) => {
+        try {
+          const userInfo = await User.findById(id);
+          const adopterInfo = await AdopterQuestionnarie.findOne({
+            userId: id,
+          });
 
-				const { errors, isValid } = validateRegister(
-					registerInput.fullName,
-					registerInput.email,
-					registerInput.password,
-					registerInput.repeatPassword
-				);
+          return {
+            userInfo: userInfo,
+            adopterInfo: adopterInfo,
+          };
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
+      getAdoptedInfo: async (parent, { id }, context) => {
+        try {
+          const pets = await AdoptedQuestionnarie.find({ userId: id });
 
-				if (!isValid) throw { errors: errors };
+          return pets;
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
+    },
 
-				const isEmailTaken = await User.findOne({ email: email });
+    Mutation: {
+      register: async (parent, { registerInput }, context, info) => {
+        try {
+          const { account, age, email, fullName } = registerInput;
+          let { password } = registerInput;
 
-				if (isEmailTaken) {
-					errors.email = "Este correo ya esta registrado";
-					throw {
-						errors: errors,
-					};
-				}
+          const { errors, isValid } = validateRegister(
+            registerInput.fullName,
+            registerInput.email,
+            registerInput.password,
+            registerInput.repeatPassword
+          );
 
-				password = await hash(password, 10);
+          if (!isValid) throw { errors: errors };
 
-				const user = await new User({
-					account: account,
-					age: age,
-					email: email,
-					fullName: fullName,
-					password: password,
-				}).save();
+          const isEmailTaken = await User.findOne({ email: email });
 
-				const token = generateToken(user.id, user.email, user.fullName);
+          if (isEmailTaken) {
+            errors.email = "Este correo ya esta registrado";
+            throw {
+              errors: errors,
+            };
+          }
 
-				const userToReturn = {
-					...user._doc,
-					id: user.id,
-					token: token,
-				};
+          password = await hash(password, 10);
 
-				return userToReturn;
-			},
+          const user = await new User({
+            account: account,
+            age: age,
+            email: email,
+            fullName: fullName,
+            password: password,
+          }).save();
 
-			answerAdoptedQuestionnaire: async (
-				parent,
-				{ adoptedQuestionnaireInput }
-			) => {
-				try {
-					const {
-						userId,
-						adoptedPetName,
-						ageOfAdoptedPet,
-						genderOfAdoptedPet,
-						typeOfAdoptedPet,
-						adoptedPetDescription,
-						adoptedPetProtocol,
-						coexistenceWithOtherPets,
-						isHealthyWithKids,
-						isHealthyWithOtherPets,
-					} = adoptedQuestionnaireInput;
+          const token = generateToken(user.id, user.email, user.account);
 
-					if (!adoptedPetDescription)
-						throw {
-							error: {
-								adoptedPetDescription: "Campo vacío",
-							},
-						};
+          const userToReturn = {
+            ...user._doc,
+            id: user.id,
+            token: token,
+          };
 
-					await new AdoptedQuestionnarie({
-						userId: userId,
-						adoptedPetName: adoptedPetName,
-						ageOfAdoptedPet: ageOfAdoptedPet,
-						genderOfAdoptedPet: genderOfAdoptedPet,
-						typeOfAdoptedPet: typeOfAdoptedPet,
-						adoptedPetDescription: adoptedPetDescription,
-						adoptedPetProtocol: adoptedPetProtocol,
-						coexistenceWithOtherPets: coexistenceWithOtherPets,
-						isHealthyWithKids: isHealthyWithKids,
-						isHealthyWithOtherPets: isHealthyWithOtherPets,
-					}).save();
+          return userToReturn;
+        } catch (error) {
+          console.log(error);
+        }
+      },
 
-					return "Cuestionario completado";
-				} catch (error) {
-					console.log(error);
-				}
-			},
+      answerAdoptedQuestionnaire: async (
+        parent,
+        { adoptedQuestionnaireInput }
+      ) => {
+        try {
+          const {
+            userId,
+            adoptedPetName,
+            ageOfAdoptedPet,
+            genderOfAdoptedPet,
+            typeOfAdoptedPet,
+            adoptedPetDescription,
+            adoptedPetProtocol,
+            coexistenceWithOtherPets,
+            isHealthyWithKids,
+            isHealthyWithOtherPets,
+          } = adoptedQuestionnaireInput;
 
-			answerAdopterQuestionnaire: async (
-				parent,
-				{ adopterQuestionnaireInput }
-			) => {
-				try {
-					console.log("hola");
-					await new AdopterQuestionnarie(adopterQuestionnaireInput).save();
-					return "Listo";
-				} catch (error) {
-					console.log(error);
-				}
-			},
+          if (!adoptedPetDescription) {
+            throw {
+              error: {
+                adoptedPetDescription: "Campo vacío",
+              },
+            };
+          }
 
-			login: async (parent, { loginInput }) => {
-				try {
-					const { email, password } = loginInput;
+          await new AdoptedQuestionnarie({
+            userId: userId,
+            adoptedPetName: adoptedPetName,
+            ageOfAdoptedPet: ageOfAdoptedPet,
+            genderOfAdoptedPet: genderOfAdoptedPet,
+            typeOfAdoptedPet: typeOfAdoptedPet,
+            adoptedPetDescription: adoptedPetDescription,
+            adoptedPetProtocol: adoptedPetProtocol,
+            coexistenceWithOtherPets: coexistenceWithOtherPets,
+            isHealthyWithKids: isHealthyWithKids,
+            isHealthyWithOtherPets: isHealthyWithOtherPets,
+          }).save();
 
-					const user = await User.findOne({ email: email });
+          return "Cuestionario completado";
+        } catch (error) {
+          console.log(error);
+        }
+      },
 
-					if (!user) {
-						throw {
-							error: "Email no encontrado",
-						};
-					}
+      answerAdopterQuestionnaire: async (
+        parent,
+        { adopterQuestionnaireInput }
+      ) => {
+        try {
+          console.log("Usuario adoptante registrado");
+          await new AdopterQuestionnarie(adopterQuestionnaireInput).save();
+          return "Listo";
+        } catch (error) {
+          console.log(error);
+        }
+      },
 
-					if (!(await compare(password, user.password))) {
-						throw {
-							error: "Contraseña Incorrecta",
-						};
-					}
+      login: async (parent, { loginInput }) => {
+        try {
+          const { email, password } = loginInput;
 
-					const token = generateToken(user.id, user.email, user.fullName);
+          const user = await User.findOne({ email: email });
 
-					const userToReturn = {
-						...user._doc,
-						id: user.id,
-						token: token,
-					};
+          if (!user) {
+            throw {
+              error: "Email no encontrado",
+            };
+          }
 
-					return userToReturn;
-					s;
-				} catch (error) {
-					console.log(error);
-				}
-			},
-		},
-	},
+          if (!(await compare(password, user.password))) {
+            throw {
+              error: "Contraseña Incorrecta",
+            };
+          }
+
+          const token = generateToken(user.id, user.email, user.account);
+
+          const userToReturn = {
+            ...user._doc,
+            id: user.id,
+            token: token,
+          };
+
+          return userToReturn;
+          s;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      addProfilePicture: async (parent, { id, profilePicture }) => {
+        try {
+          const { createReadStream, filename, mimetype, encoding } =
+            await profilePicture;
+
+          const { ext } = path.parse(filename);
+
+          let randomfileName = "";
+
+          for (let i = 0; i < 15; i++) {
+            randomfileName += Math.floor(Math.random() * 1000) + "";
+          }
+
+          const date = new Date();
+          randomfileName +=
+            date.getDay() + date.getMonth() + date.getFullYear() + "";
+
+          const stream = createReadStream();
+
+          const pathName = path.join(
+            __dirname,
+            `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
+          );
+
+          await stream.pipe(fs.createWriteStream(pathName));
+
+          await User.findByIdAndUpdate(id, {
+            profilePicture: {
+              filename: randomfileName + ".jpg",
+              mimetype: mimetype,
+              encoding: encoding,
+            },
+          });
+
+          return "Listo";
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      scanPicture: async (parent, { url }) => {
+        let { result } = await client.landmarkDetection(url);
+
+        console.Console(result);
+
+        return "done";
+      },
+      deletePetInfo: async (parent, { petId }) => {
+        try {
+          await AdoptedQuestionnarie.findByIdAndDelete(petId);
+
+          return "eliminado";
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
+    },
+  },
 };

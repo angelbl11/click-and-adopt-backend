@@ -1,78 +1,135 @@
 const { gql } = require("apollo-server-core");
 
 module.exports = {
-	typeDefinitions: gql`
-		type User {
-			id: String!
-			account: String!
-			age: Int!
-			email: String!
-			fullName: String!
-			password: String!
-			token: String!
-		}
+  typeDefinitions: gql`
+    scalar Upload
 
-		input RegisterInput {
-			account: String!
-			age: Int!
-			email: String!
-			fullName: String!
-			password: String!
-			repeatPassword: String!
-		}
+    input LoginInput {
+      email: String!
+      password: String!
+    }
 
-		input AdoptedQuestionnaireInput {
-			userId: ID!
-			adoptedPetName: String!
-			ageOfAdoptedPet: String!
-			genderOfAdoptedPet: String!
-			typeOfAdoptedPet: String!
-			adoptedPetDescription: String!
-			adoptedPetProtocol: String!
-			coexistenceWithOtherPets: [String!]
-			isHealthyWithKids: Boolean!
-			isHealthyWithOtherPets: Boolean!
-		}
+    input RegisterInput {
+      account: String!
+      age: Int!
+      email: String!
+      fullName: String!
+      password: String!
+      repeatPassword: String!
+    }
 
-		input AdopterQuestionnaireInput {
-			userId: ID!
-			actualPets: [String!]
-			hadPets: Boolean!
-			hadPetsDate: String!
-			hadPetsValue: String!
-			havePets: Boolean!
-			isChildren: Boolean!
-			numberOfCats: Int!
-			numberOfDogs: Int!
-			numberOfDays: Int!
-			numberOfMonths: Int!
-			numberOfYears: Int!
-			petPreferences: [String!]
-			reasonToAdopt: String!
-			isAgreeWithProtocol: Boolean!
-			petAgePreferences: [String!]
-			petGenderPreferences: [String!]
-			petSizePreferences: [String!]
-		}
+    input AdoptedQuestionnaireInput {
+      userId: ID!
+      adoptedPetName: String!
+      ageOfAdoptedPet: String!
+      genderOfAdoptedPet: String!
+      typeOfAdoptedPet: String!
+      adoptedPetDescription: String!
+      adoptedPetProtocol: String!
+      coexistenceWithOtherPets: [String!]
+      isHealthyWithKids: Boolean!
+      isHealthyWithOtherPets: Boolean!
+      petPicture: Upload
+    }
 
-		input LoginInput {
-			email: String!
-			password: String!
-		}
+    input AdopterQuestionnaireInput {
+      userId: ID!
+      haveDog: Boolean!
+      haveCat: Boolean!
+      hadPets: Boolean!
+      hadPetsDate: String
+      hadPetsValue: String
+      havePets: Boolean!
+      isChildren: Boolean!
+      numberOfCats: Int
+      numberOfDogs: Int
+      numberOfDays: Int
+      numberOfMonths: Int
+      numberOfYears: Int
+      petPreferences: [String!]
+      reasonToAdopt: String!
+      isAgreeWithProtocol: Boolean!
+      petAgePreferences: [String!]
+      petGenderPreferences: [String!]
+      petSizePreferences: [String!]
+    }
 
-		type Query {
-			sayHi: String!
-		}
+    type Picture {
+      filename: String
+      mimetype: String
+      encoding: String
+    }
 
-		type Mutation {
-			register(registerInput: RegisterInput!): User!
-			answerAdoptedQuestionnaire(
-				adoptedQuestionnaireInput: AdoptedQuestionnaireInput!
-			): String!
-			answerAdopterQuestionnaire(
-				adopterQuestionnaireInput: AdopterQuestionnaireInput!
-			): String!
-			login(loginInput: LoginInput!): User!
-		}
-	`,
+    type User {
+      id: String!
+      account: String!
+      age: Int!
+      email: String!
+      fullName: String!
+      password: String!
+      token: String
+      profilePicture: Picture
+    }
+
+    type AdoptedCuestionaire {
+      userId: ID!
+      adoptedPetName: String!
+      ageOfAdoptedPet: String!
+      genderOfAdoptedPet: String!
+      typeOfAdoptedPet: String!
+      adoptedPetDescription: String!
+      adoptedPetProtocol: String!
+      coexistenceWithOtherPets: [String!]
+      isHealthyWithKids: Boolean!
+      isHealthyWithOtherPets: Boolean!
+      petPicture: Picture
+    }
+
+    type AdopterCuestionaire {
+      userId: ID!
+      haveDog: Boolean!
+      haveCat: Boolean!
+      hadPets: Boolean!
+      hadPetsDate: String
+      hadPetsValue: String
+      havePets: Boolean!
+      isChildren: Boolean!
+      numberOfCats: Int
+      numberOfDogs: Int
+      numberOfDays: Int
+      numberOfMonths: Int
+      numberOfYears: Int
+      petPreferences: [String!]
+      reasonToAdopt: String!
+      isAgreeWithProtocol: Boolean!
+      petAgePreferences: [String!]
+      petGenderPreferences: [String!]
+      petSizePreferences: [String!]
+    }
+
+    type AdopterInfo {
+      userInfo: User
+      adopterInfo: AdopterCuestionaire
+    }
+
+    type Query {
+      sayHi: String!
+      getAdopterInfo(id: String!): AdopterInfo!
+      getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
+    }
+
+    type Mutation {
+      register(registerInput: RegisterInput!): User!
+      answerAdoptedQuestionnaire(
+        adoptedQuestionnaireInput: AdoptedQuestionnaireInput!
+      ): String!
+      answerAdopterQuestionnaire(
+        adopterQuestionnaireInput: AdopterQuestionnaireInput!
+      ): String!
+      login(loginInput: LoginInput!): User!
+      addProfilePicture(id: String!, profilePicture: Upload!): String!
+      scanPicture(url: String!): String!
+      deletePetInfo(petId: String!): String!
+    }
+  `,
 };

@@ -1,108 +1,111 @@
 const { model, Schema } = require("mongoose");
 
 const schema = new Schema({
-	userId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "User",
-	},
+  userId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 
-	actualPets: [
-		{
-			required: false,
-			type: String,
-		},
-	],
+  haveDog: {
+    required: true,
+    type: Boolean,
+  },
 
-	hadPets: {
-		required: true,
-		type: Boolean,
-	},
+  haveCat: {
+    required: true,
+    type: Boolean,
+  },
 
-	hadPetsDate: {
-		required: true,
-		type: String,
-	},
+  hadPets: {
+    required: true,
+    type: Boolean,
+  },
 
-	hadPetsValue: {
-		required: true,
-		type: String,
-	},
+  hadPetsDate: {
+    required: false,
+    type: String,
+  },
 
-	havePets: {
-		required: true,
-		type: Boolean,
-	},
+  hadPetsValue: {
+    required: false,
+    type: String,
+  },
 
-	isChildren: {
-		required: true,
-		type: Boolean,
-	},
+  havePets: {
+    required: true,
+    type: Boolean,
+  },
 
-	numberOfCats: {
-		required: true,
-		type: Number,
-	},
+  isChildren: {
+    required: true,
+    type: Boolean,
+  },
 
-	numberOfDogs: {
-		required: true,
-		type: Number,
-	},
+  numberOfCats: {
+    required: false,
+    type: Number,
+  },
 
-	numberOfDays: {
-		required: true,
-		type: Number,
-	},
+  numberOfDogs: {
+    required: false,
+    type: Number,
+  },
 
-	numberOfMonths: {
-		required: true,
-		type: Number,
-	},
+  numberOfDays: {
+    required: false,
+    type: Number,
+  },
 
-	numberOfYears: {
-		required: true,
-		type: Number,
-	},
+  numberOfMonths: {
+    required: false,
+    type: Number,
+  },
 
-	petPreferences: [
-		{
-			type: String,
-			required: true,
-		},
-	],
+  numberOfYears: {
+    required: false,
+    type: Number,
+  },
 
-	reasonToAdopt: {
-		required: true,
-		type: String,
-	},
+  petPreferences: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 
-	isAgreeWithProtocol: {
-		type: Boolean,
-		required: true,
-	},
+  reasonToAdopt: {
+    required: true,
+    type: String,
+  },
 
-	petAgePreferences: [
-		{
-			type: String,
-			required: true,
-		},
-	],
+  isAgreeWithProtocol: {
+    type: Boolean,
+    required: true,
+  },
 
-	petGenderPreferences: [
-		{
-			type: String,
-			required: true,
-		},
-	],
+  petAgePreferences: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 
-	petSizePreferences: [
-		{
-			type: String,
-			required: true,
-		},
-	],
+  petGenderPreferences: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+
+  petSizePreferences: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 });
 
 module.exports = {
-	AdopterQuestionnarie: model("AdopterQuestionnaire", schema),
+  AdopterQuestionnarie: model("AdopterQuestionnaire", schema),
 };

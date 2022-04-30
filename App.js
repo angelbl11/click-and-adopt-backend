@@ -12,53 +12,53 @@ const { typeDefinitions } = require("./Api/Graphql/TypeDefs");
 const { resolvers } = require("./Api/Graphql/Resolvers");
 
 const startServer = async () => {
-	const app = express();
+  const app = express();
 
-	const httpServer = createServer(app);
+  const httpServer = createServer(app);
 
-	const schema = makeExecutableSchema({
-		typeDefs: typeDefinitions,
-		resolvers: resolvers,
-	});
+  const schema = makeExecutableSchema({
+    typeDefs: typeDefinitions,
+    resolvers: resolvers,
+  });
 
-	const subscriptionServer = SubscriptionServer.create(
-		{ schema: schema, execute, subscribe },
-		{ server: httpServer, path: "/graphql" }
-	);
+  const subscriptionServer = SubscriptionServer.create(
+    { schema: schema, execute, subscribe },
+    { server: httpServer, path: "/graphql" }
+  );
 
-	const server = new ApolloServer({
-		schema: schema,
-		plugins: [
-			{
-				async serverWillStart() {
-					return {
-						async drainServer() {
-							subscriptionServer.close();
-						},
-					};
-				},
-			},
-		],
-		context: (req) => req,
-	});
+  const server = new ApolloServer({
+    schema: schema,
+    plugins: [
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close();
+            },
+          };
+        },
+      },
+    ],
+    context: (req) => req,
+  });
 
-	await server.start();
+  await server.start();
 
-	app.use(graphqlUploadExpress());
+  app.use(graphqlUploadExpress());
 
-	server.applyMiddleware({ app });
+  server.applyMiddleware({ app });
 
-	app.use(express.static("public"));
+  app.use(express.static("Images"));
 
-	const PORT = 4000;
-	httpServer.listen(PORT, () =>
-		console.log(`Server is now running on http://localhost:4000/graphql`)
-	);
+  const PORT = 4000;
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:4000/graphql`)
+  );
 };
 
 mongoose
-	.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-	.then(() => {
-		console.log("Set up ready");
-		startServer();
-	});
+  .connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Set up ready");
+    startServer();
+  });
