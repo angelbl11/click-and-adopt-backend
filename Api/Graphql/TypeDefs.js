@@ -9,6 +9,12 @@ module.exports = {
       password: String!
     }
 
+    input EditInput {
+      email: String
+      age: Int
+      fullName: String
+    }
+
     input RegisterInput {
       account: String!
       age: Int!
@@ -30,6 +36,7 @@ module.exports = {
       isHealthyWithKids: Boolean!
       isHealthyWithOtherPets: Boolean!
       petPicture: Upload
+      isAvailableToBeAdopted: Boolean
     }
 
     input AdopterQuestionnaireInput {
@@ -52,6 +59,7 @@ module.exports = {
       petAgePreferences: [String!]
       petGenderPreferences: [String!]
       petSizePreferences: [String!]
+      isAvailableToAdopt: Boolean
     }
 
     type Picture {
@@ -72,6 +80,7 @@ module.exports = {
     }
 
     type AdoptedCuestionaire {
+      id: ID
       userId: ID!
       adoptedPetName: String!
       ageOfAdoptedPet: String!
@@ -83,6 +92,7 @@ module.exports = {
       isHealthyWithKids: Boolean!
       isHealthyWithOtherPets: Boolean!
       petPicture: Picture
+      isAvailableToBeAdopted: Boolean
     }
 
     type AdopterCuestionaire {
@@ -105,6 +115,7 @@ module.exports = {
       petAgePreferences: [String!]
       petGenderPreferences: [String!]
       petSizePreferences: [String!]
+      isAvailableToAdopt: Boolean
     }
 
     type AdopterInfo {
@@ -128,8 +139,10 @@ module.exports = {
       ): String!
       login(loginInput: LoginInput!): User!
       addProfilePicture(id: String!, profilePicture: Upload!): String!
-      scanPicture(url: String!): String!
+      addProfilePetPicture(id: String!, petProfilePicture: Upload!): String!
       deletePetInfo(petId: String!): String!
+      editUserInfo(id: String!, editInput: EditInput!): String!
+      updateAdopterStatus(id: String!, userStatus: Boolean!): String!
     }
   `,
 };

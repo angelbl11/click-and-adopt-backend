@@ -83,6 +83,10 @@ const schema = new Schema({
     type: Boolean,
     required: true,
   },
+  isAvailableToAdopt: {
+    type: Boolean,
+    required: false,
+  },
 
   petAgePreferences: [
     {

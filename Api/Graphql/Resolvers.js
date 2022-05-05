@@ -105,6 +105,7 @@ module.exports = {
             coexistenceWithOtherPets,
             isHealthyWithKids,
             isHealthyWithOtherPets,
+            isAvailableToBeAdopted,
           } = adoptedQuestionnaireInput;
 
           if (!adoptedPetDescription) {
@@ -126,6 +127,7 @@ module.exports = {
             coexistenceWithOtherPets: coexistenceWithOtherPets,
             isHealthyWithKids: isHealthyWithKids,
             isHealthyWithOtherPets: isHealthyWithOtherPets,
+            isAvailableToBeAdopted: isAvailableToBeAdopted,
           }).save();
 
           return "Cuestionario completado";
@@ -174,7 +176,6 @@ module.exports = {
           };
 
           return userToReturn;
-          s;
         } catch (error) {
           console.log(error);
         }
@@ -218,12 +219,44 @@ module.exports = {
           console.log(error);
         }
       },
-      scanPicture: async (parent, { url }) => {
-        let { result } = await client.landmarkDetection(url);
+      addProfilePetPicture: async (parent, { id, petProfilePicture }) => {
+        try {
+          const { createReadStream, filename, mimetype, encoding } =
+            await petProfilePicture;
 
-        console.Console(result);
+          const { ext } = path.parse(filename);
 
-        return "done";
+          let randomfileName = "";
+
+          for (let i = 0; i < 15; i++) {
+            randomfileName += Math.floor(Math.random() * 1000) + "";
+          }
+
+          const date = new Date();
+          randomfileName +=
+            date.getDay() + date.getMonth() + date.getFullYear() + "";
+
+          const stream = createReadStream();
+
+          const pathName = path.join(
+            __dirname,
+            `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
+          );
+
+          await stream.pipe(fs.createWriteStream(pathName));
+
+          await AdoptedQuestionnarie.findByIdAndUpdate(id, {
+            petPicture: {
+              filename: randomfileName + ".jpg",
+              mimetype: mimetype,
+              encoding: encoding,
+            },
+          });
+
+          return "Listo";
+        } catch (error) {
+          console.log(error);
+        }
       },
       deletePetInfo: async (parent, { petId }) => {
         try {
@@ -232,6 +265,36 @@ module.exports = {
           return "eliminado";
         } catch (error) {
           throw new Error(error);
+        }
+      },
+      editUserInfo: async (parent, { editInput, id }) => {
+        try {
+          const { email, fullName, age } = editInput;
+          await User.findByIdAndUpdate(id, {
+            email: email,
+            fullName: fullName,
+            age: age,
+          });
+
+          const isEmailTaken = await User.findOne({ email: email });
+
+          if (isEmailTaken) {
+            return "Este correo ya está registrado";
+          } else {
+            return "Info actualizada";
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      updateAdopterStatus: async (parent, { id, userStatus }) => {
+        try {
+          await AdopterQuestionnarie.findByIdAndUpdate(id, {
+            isAvailableToAdopt: userStatus,
+          });
+          return "Estado actualizado";
+        } catch (error) {
+          console.log(error);
         }
       },
     },
