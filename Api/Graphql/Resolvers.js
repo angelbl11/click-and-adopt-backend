@@ -7,6 +7,11 @@ const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
 const { GraphQLUpload } = require("graphql-upload");
 const path = require("path");
 const fs = require("fs");
+const vision = require("@google-cloud/vision");
+const { CONFIG } = require("../../visionClient");
+
+const client = new vision.ImageAnnotatorClient(CONFIG);
+
 module.exports = {
   resolvers: {
     Upload: GraphQLUpload,
@@ -21,6 +26,8 @@ module.exports = {
           const adopterInfo = await AdopterQuestionnarie.findOne({
             userId: id,
           });
+
+          console.log(adopterInfo);
 
           return {
             userInfo: userInfo,
@@ -142,6 +149,7 @@ module.exports = {
       ) => {
         try {
           console.log("Usuario adoptante registrado");
+          adopterQuestionnaireInput.isAvailableToAdopt = false;
           await new AdopterQuestionnarie(adopterQuestionnaireInput).save();
           return "Listo";
         } catch (error) {
@@ -219,6 +227,29 @@ module.exports = {
           console.log(error);
         }
       },
+      scanPicture: async (parent, { url }) => {
+        client
+          .labelDetection(url)
+          .then((results) => {
+            const labels = results[0].labelAnnotations;
+            console.log("Labels:");
+            labels.forEach((label) => console.log(label.description));
+          })
+          .catch((err) => {
+            console.log("Error:", err);
+          });
+        return "Imagen analizada";
+      },
+
+      deletePetInfo: async (parent, { petId }) => {
+        try {
+          await AdoptedQuestionnarie.findByIdAndDelete(petId);
+
+          return "eliminado";
+        } catch (error) {
+          throw new Error(error);
+        }
+      },
       addProfilePetPicture: async (parent, { id, petProfilePicture }) => {
         try {
           const { createReadStream, filename, mimetype, encoding } =
@@ -271,24 +302,18 @@ module.exports = {
         try {
           const { email, fullName, age } = editInput;
           await User.findByIdAndUpdate(id, {
-            email: email,
-            fullName: fullName,
-            age: age,
+            email: email ? email : undefined,
+            fullName: fullName ? fullName : undefined,
+            age: age ? age : undefined,
           });
-
-          const isEmailTaken = await User.findOne({ email: email });
-
-          if (isEmailTaken) {
-            return "Este correo ya está registrado";
-          } else {
-            return "Info actualizada";
-          }
+          return "Info actualizada";
         } catch (error) {
           console.log(error);
         }
       },
       updateAdopterStatus: async (parent, { id, userStatus }) => {
         try {
+          console.log(userStatus);
           await AdopterQuestionnarie.findByIdAndUpdate(id, {
             isAvailableToAdopt: userStatus,
           });

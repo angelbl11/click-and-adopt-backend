@@ -97,6 +97,7 @@ module.exports = {
 
     type AdopterCuestionaire {
       userId: ID!
+      id: ID!
       haveDog: Boolean!
       haveCat: Boolean!
       hadPets: Boolean!
@@ -139,6 +140,7 @@ module.exports = {
       ): String!
       login(loginInput: LoginInput!): User!
       addProfilePicture(id: String!, profilePicture: Upload!): String!
+      scanPicture(url: String!): String!
       addProfilePetPicture(id: String!, petProfilePicture: Upload!): String!
       deletePetInfo(petId: String!): String!
       editUserInfo(id: String!, editInput: EditInput!): String!
