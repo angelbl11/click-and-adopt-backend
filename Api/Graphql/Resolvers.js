@@ -123,7 +123,7 @@ module.exports = {
             };
           }
 
-          await new AdoptedQuestionnarie({
+          const newAdopted = await new AdoptedQuestionnarie({
             userId: userId,
             adoptedPetName: adoptedPetName,
             ageOfAdoptedPet: ageOfAdoptedPet,
@@ -137,7 +137,7 @@ module.exports = {
             isAvailableToBeAdopted: isAvailableToBeAdopted,
           }).save();
 
-          return "Cuestionario completado";
+          return newAdopted.id;
         } catch (error) {
           console.log(error);
         }
