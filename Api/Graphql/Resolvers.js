@@ -171,7 +171,7 @@ module.exports = {
 
           if (!(await compare(password, user.password))) {
             throw {
-              error: "Contraseña Incorrecta",
+              Error: "Contraseña Incorrecta",
             };
           }
 
