@@ -334,6 +334,18 @@ module.exports = {
           console.log(error);
         }
       },
+
+      updateAdoptedStatus: async (parent, { id, petStatus }) => {
+        try {
+          console.log(userStatus);
+          await AdoptedQuestionnarie.findByIdAndUpdate(id, {
+            isAvailableToBeAdopted: petStatus,
+          });
+          return "Estado actualizado";
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
   },
 };

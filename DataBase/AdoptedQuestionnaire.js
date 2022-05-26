@@ -48,7 +48,10 @@ const schema = new Schema({
     required: true,
     type: Boolean,
   },
-
+  isAvailableToBeAdopted: {
+    type: Boolean,
+    required: true,
+  },
   isHealthyWithOtherPets: {
     required: true,
     type: Boolean,

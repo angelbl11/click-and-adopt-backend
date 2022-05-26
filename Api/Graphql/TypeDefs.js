@@ -145,6 +145,7 @@ module.exports = {
       deletePetInfo(petId: String!): String!
       editUserInfo(id: String!, editInput: EditInput!): String!
       updateAdopterStatus(id: String!, userStatus: Boolean!): String!
+      updateAdoptedStatus(id: String!, petStatus: Boolean!): String!
     }
   `,
 };
