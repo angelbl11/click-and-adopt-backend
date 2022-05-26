@@ -50,8 +50,8 @@ const startServer = async () => {
 
   app.use(express.static("Images"));
 
-  const PORT = 4000;
-  httpServer.listen(PORT, () =>
+  const PORT = process.env.PORT || 4000;
+  httpServer.listen({ port: PORT }, () =>
     console.log(`Server is now running on http://localhost:4000/graphql`)
   );
 };
