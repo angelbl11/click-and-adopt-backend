@@ -337,7 +337,7 @@ module.exports = {
 
       updateAdoptedStatus: async (parent, { id, petStatus }) => {
         try {
-          console.log(userStatus);
+          console.log(petStatus);
           await AdoptedQuestionnarie.findByIdAndUpdate(id, {
             isAvailableToBeAdopted: petStatus,
           });
