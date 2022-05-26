@@ -82,7 +82,13 @@ module.exports = {
             password: password,
           }).save();
 
-          const token = generateToken(user.id, user.email, user.account);
+          const token = generateToken(
+            user.id,
+            user.email,
+            user.account,
+            user.age,
+            user.fullName
+          );
 
           const userToReturn = {
             ...user._doc,
@@ -175,7 +181,13 @@ module.exports = {
             };
           }
 
-          const token = generateToken(user.id, user.email, user.account);
+          const token = generateToken(
+            user.id,
+            user.email,
+            user.account,
+            user.age,
+            user.fullName
+          );
 
           const userToReturn = {
             ...user._doc,
