@@ -9,6 +9,7 @@ const path = require("path");
 const fs = require("fs");
 const vision = require("@google-cloud/vision");
 const { CONFIG } = require("../../visionClient");
+const { UserInputError } = require("apollo-server-core");
 
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
@@ -61,15 +62,18 @@ module.exports = {
             registerInput.repeatPassword
           );
 
-          if (!isValid) throw { errors: errors };
+          if (!isValid) {
+            throw new UserInputError("Errors", { errors });
+          }
 
           const isEmailTaken = await User.findOne({ email: email });
 
           if (isEmailTaken) {
-            errors.email = "Este correo ya esta registrado";
-            throw {
-              errors: errors,
-            };
+            throw new UserInputError("Email, is taken", {
+              errors: {
+                email: "Ya existe una cuenta con este email",
+              },
+            });
           }
 
           password = await hash(password, 10);
@@ -170,15 +174,19 @@ module.exports = {
           const user = await User.findOne({ email: email });
 
           if (!user) {
-            throw {
-              error: "Email no encontrado",
-            };
+            throw new UserInputError("Email, not exist", {
+              errors: {
+                email: "No existe una cuenta con este email",
+              },
+            });
           }
 
           if (!(await compare(password, user.password))) {
-            throw {
-              Error: "Contraseña Incorrecta",
-            };
+            throw new UserInputError("Wrong Credentials, bad password", {
+              errors: {
+                password: "Contraseña incorrecta",
+              },
+            });
           }
 
           const token = generateToken(
