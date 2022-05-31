@@ -127,7 +127,7 @@ module.exports = {
     type Query {
       sayHi: String!
       getAdopterInfo(id: String!): AdopterInfo!
-      getAdoptedInfo(id: String!): [AdoptedCuestionaire]
+      getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
     }
 
     type Mutation {
