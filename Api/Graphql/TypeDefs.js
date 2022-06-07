@@ -128,6 +128,7 @@ module.exports = {
       sayHi: String!
       getAdopterInfo(id: String!): AdopterInfo!
       getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
+      getRandomPet(userId: String!): [AdoptedCuestionaire!]
     }
 
     type Mutation {

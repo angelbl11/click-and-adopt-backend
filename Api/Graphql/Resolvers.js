@@ -47,6 +47,33 @@ module.exports = {
           throw new Error(error);
         }
       },
+      getRandomPet: async (parent, { userId }) => {
+        const user = await AdopterQuestionnarie.findOne({ userId: userId });
+
+        let pets = [];
+
+        for (const pref of user.petPreferences) {
+          for (const age of user.petAgePreferences) {
+            for (const gender of user.petGenderPreferences) {
+              let newPets = await AdoptedQuestionnarie.find({
+                ageOfAdoptedPet: age,
+                genderOfAdoptedPet: gender,
+                typeOfAdoptedPet: pref,
+              });
+
+              newPets.map((item) => {
+                pets.push(item);
+              });
+            }
+          }
+        }
+
+        pets = shuffle(pets);
+
+        console.log(pets);
+
+        return pets;
+      },
     },
 
     Mutation: {
