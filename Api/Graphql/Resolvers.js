@@ -94,6 +94,27 @@ module.exports = {
 
         return pets;
       },
+      getRandomAdopter: async (parent, { userId }) => {
+        const user = await AdoptedQuestionnarie.findOne({ userId: userId });
+
+        let adopters = { adopterInfo: [], userInfo: {} };
+
+        console.log(user);
+
+        let newAdopters = await AdopterQuestionnarie.find({
+          petPreferences: { $in: [user.typeOfAdoptedPet] },
+          ageOfAdoptedPet: { $in: [user.petAgePreferences] },
+          genderOfAdoptedPet: { $in: [user.petAgePreferences] },
+        }).populate("userId");
+
+        adopters = newAdopters;
+
+        adopters = shuffle(adopters);
+
+        console.log(adopters);
+
+        return adopters;
+      },
     },
 
     Mutation: {

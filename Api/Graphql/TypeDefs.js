@@ -119,6 +119,14 @@ module.exports = {
       isAvailableToAdopt: Boolean
     }
 
+    type AdopterCuestionairePlusUser {
+      petPreferences: [String!]
+      petAgePreferences: [String!]
+      petGenderPreferences: [String!]
+      id: ID!
+      userId: User!
+    }
+
     type AdopterInfo {
       userInfo: User
       adopterInfo: AdopterCuestionaire
@@ -129,6 +137,7 @@ module.exports = {
       getAdopterInfo(id: String!): AdopterInfo!
       getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
       getRandomPet(userId: String!): [AdoptedCuestionaire!]
+      getRandomAdopter(userId: String!): [AdopterCuestionairePlusUser!]
     }
 
     type Mutation {
