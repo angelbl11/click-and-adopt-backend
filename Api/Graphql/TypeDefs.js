@@ -123,6 +123,21 @@ module.exports = {
       petPreferences: [String!]
       petAgePreferences: [String!]
       petGenderPreferences: [String!]
+      petSizePreferences: [String!]
+      haveDog: Boolean!
+      haveCat: Boolean!
+      hadPets: Boolean!
+      hadPetsDate: String
+      hadPetsValue: String
+      havePets: Boolean!
+      isChildren: Boolean!
+      numberOfCats: Int
+      numberOfDogs: Int
+      numberOfDays: Int
+      numberOfMonths: Int
+      numberOfYears: Int
+      reasonToAdopt: String!
+      isAgreeWithProtocol: Boolean!
       id: ID!
       userId: User!
     }
