@@ -171,6 +171,7 @@ module.exports = {
       editUserInfo(id: String!, editInput: EditInput!): String!
       updateAdopterStatus(id: String!, userStatus: Boolean!): String!
       updateAdoptedStatus(id: String!, petStatus: Boolean!): String!
+      likePet(petId: String!, userId: String!): String!
     }
   `,
 };

@@ -10,6 +10,7 @@ const fs = require("fs");
 const vision = require("@google-cloud/vision");
 const { CONFIG } = require("../../visionClient");
 const { UserInputError } = require("apollo-server-core");
+const { Like } = require("../../DataBase/Like");
 
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
@@ -421,6 +422,30 @@ module.exports = {
         } catch (error) {
           console.log(error);
         }
+      },
+
+      likePet: async (parent, { petId, userId }) => {
+        const likes = await Like.find({ userId: userId });
+
+        let flag = false;
+
+        likes.map((item) => {
+          if (petId == item.petId) {
+            console.log("se repite: " + item);
+            flag = true;
+          }
+        });
+
+        if (flag) return "Like repetido";
+
+        if (likes.length > 10) return "Limite excedido";
+
+        await new Like({
+          petId: petId,
+          userId: userId,
+        }).save();
+
+        return "Like";
       },
     },
   },
