@@ -8,19 +8,19 @@ const UserMutation = require("../Mutations/UsersMutation");
 const LikeMutation = require("../Mutations/LikeMutation");
 
 module.exports = {
-	resolvers: {
-		Upload: GraphQLUpload,
-		Query: {
-			...UserQueries,
-			...RandomQueries,
-			...LikesQueries,
-		},
+  resolvers: {
+    Upload: GraphQLUpload,
+    Query: {
+      ...UserQueries,
+      ...RandomQueries,
+      ...LikesQueries,
+    },
 
-		Mutation: {
-			...AuthMutation,
-			...QuestionaireMutation,
-			...UserMutation,
-			...LikeMutation,
-		},
-	},
+    Mutation: {
+      ...AuthMutation,
+      ...QuestionaireMutation,
+      ...UserMutation,
+      ...LikeMutation,
+    },
+  },
 };
