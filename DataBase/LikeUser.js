@@ -1,13 +1,13 @@
 const { model, Schema } = require("mongoose");
 
 const schema = new Schema({
-	petId: {
+	userId: {
 		required: true,
 		type: Schema.Types.ObjectId,
-		ref: "AdoptedQuestionnaire",
+		ref: "User",
 	},
 
-	userId: {
+	likedUserId: {
 		required: true,
 		type: Schema.Types.ObjectId,
 		ref: "User",
@@ -20,5 +20,5 @@ const schema = new Schema({
 });
 
 module.exports = {
-	Like: model("Like", schema),
+	LikeUser: model("LikeUser", schema),
 };
