@@ -10,6 +10,7 @@ const LikeMutation = require("../Mutations/LikeMutation");
 module.exports = {
   resolvers: {
     Upload: GraphQLUpload,
+
     Query: {
       ...UserQueries,
       ...RandomQueries,
