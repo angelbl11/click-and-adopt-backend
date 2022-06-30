@@ -6,22 +6,24 @@ const AuthMutation = require("../Mutations/AuthMutation");
 const QuestionaireMutation = require("../Mutations/QuestionaireMutations");
 const UserMutation = require("../Mutations/UsersMutation");
 const LikeMutation = require("../Mutations/LikeMutation");
+const DislikeMutation = require("../Mutations/DislikeMutation");
 
 module.exports = {
-  resolvers: {
-    Upload: GraphQLUpload,
+	resolvers: {
+		Upload: GraphQLUpload,
 
-    Query: {
-      ...UserQueries,
-      ...RandomQueries,
-      ...LikesQueries,
-    },
+		Query: {
+			...UserQueries,
+			...RandomQueries,
+			...LikesQueries,
+		},
 
-    Mutation: {
-      ...AuthMutation,
-      ...QuestionaireMutation,
-      ...UserMutation,
-      ...LikeMutation,
-    },
-  },
+		Mutation: {
+			...AuthMutation,
+			...QuestionaireMutation,
+			...UserMutation,
+			...LikeMutation,
+			...DislikeMutation,
+		},
+	},
 };

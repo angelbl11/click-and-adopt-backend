@@ -153,19 +153,39 @@ module.exports = {
 			date: String!
 		}
 
+		type ReturnLike {
+			likes: [Like!]
+			numOfLikes: Int!
+		}
+
 		type LikeUser {
 			userId: User!
 			likedUserId: User!
 			date: String!
 		}
 
+		type ReturnLikeUser {
+			likes: [LikeUser!]
+			numOfLikes: Int!
+		}
+
+		type RandomPets {
+			pets: [AdoptedCuestionaire!]
+			numOfLikes: Int!
+		}
+
+		type RandomUsers {
+			users: [AdopterCuestionairePlusUser!]
+			numOfLikes: Int!
+		}
+
 		type Query {
 			getAdopterInfo(id: String!): AdopterInfo!
 			getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
-			getRandomPet(userId: String!): [AdoptedCuestionaire!]
-			getRandomAdopter(userId: String!): [AdopterCuestionairePlusUser!]
-			getPetsLikes(userId: String!): [Like!]
-			getUserLikes(userId: String!): [LikeUser!]
+			getRandomPet(userId: String!): RandomPets!
+			getRandomAdopter(userId: String!): RandomUsers
+			getPetsLikes(userId: String!): ReturnLike!
+			getUserLikes(userId: String!): ReturnLikeUser!
 		}
 
 		type Mutation {
@@ -186,6 +206,8 @@ module.exports = {
 			updateAdoptedStatus(id: String!, petStatus: Boolean!): String!
 			likePet(petId: String!, userId: String!): String!
 			likeUser(userId: String!, likedUserId: String!): String!
+			dislikePet(petId: String!, userId: String!): String!
+			dislikeUser(userId: String!, likedUserId: String!): String!
 		}
 	`,
 };

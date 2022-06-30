@@ -1,5 +1,9 @@
 const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
 const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
+const { Dislike } = require("../../DataBase/Dislike");
+const { DislikeUser } = require("../../DataBase/DisLikeUser");
+const { Like } = require("../../DataBase/Like");
+const { LikeUser } = require("../../DataBase/LikeUser");
 
 function shuffle(array) {
 	let currentIndex = array.length,
@@ -24,6 +28,8 @@ function shuffle(array) {
 module.exports = {
 	getRandomPet: async (parent, { userId }) => {
 		const user = await AdopterQuestionnarie.findOne({ userId: userId });
+		const likes = await Like.find({ userId: userId });
+		const dislikes = await Dislike.find({ userId: userId });
 
 		let pets = [];
 
@@ -36,8 +42,18 @@ module.exports = {
 						typeOfAdoptedPet: pref,
 					});
 
+					let check = false;
+
 					newPets.map((item) => {
-						pets.push(item);
+						likes.map((likesItem) => {
+							if (likesItem.petId == item.id) check = true;
+						});
+
+						dislikes.map((dislikeItem) => {
+							if (dislikeItem.petId == item.id) check = true;
+						});
+
+						if (!check) pets.push(item);
 					});
 				}
 			}
@@ -45,29 +61,40 @@ module.exports = {
 
 		pets = shuffle(pets);
 
-		console.log(pets);
-
-		return pets;
+		return {
+			pets: pets,
+			numOfLikes: likes.length,
+		};
 	},
 	getRandomAdopter: async (parent, { userId }) => {
 		const user = await AdoptedQuestionnarie.findOne({ userId: userId });
+		const likes = await LikeUser.find({ userId: userId });
+		const dislikes = await DislikeUser.find({ userId: userId });
 
-		let adopters = { adopterInfo: [], userInfo: {} };
-
-		console.log(user);
-
-		let newAdopters = await AdopterQuestionnarie.find({
+		const adopters = await AdopterQuestionnarie.find({
 			petPreferences: { $in: [user.typeOfAdoptedPet] },
 			ageOfAdoptedPet: { $in: [user.petAgePreferences] },
 			genderOfAdoptedPet: { $in: [user.petAgePreferences] },
 		}).populate("userId");
 
-		adopters = newAdopters;
+		let newAdopters = [];
 
-		adopters = shuffle(adopters);
+		adopters.map((adopItem) => {
+			let flag = false;
 
-		console.log(adopters);
+			likes.map((item) => {
+				if (adopItem.userId.id == item.likedUserId) flag = true;
+			});
 
-		return adopters;
+			dislikes.map((dislikeItem) => {
+				if (adopItem.userId.id == dislikeItem.likedUserId) flag = true;
+			});
+
+			if (!flag) newAdopters.push(adopItem);
+		});
+
+		newAdopters = shuffle(newAdopters);
+
+		return { users: newAdopters, numOfLikes: likes.length };
 	},
 };
