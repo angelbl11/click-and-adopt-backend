@@ -95,6 +95,22 @@ module.exports = {
 			isAvailableToBeAdopted: Boolean
 		}
 
+		type AdoptedCuestionairePlusUser {
+			id: ID
+			userId: User!
+			adoptedPetName: String!
+			ageOfAdoptedPet: String!
+			genderOfAdoptedPet: String!
+			typeOfAdoptedPet: String!
+			adoptedPetDescription: String!
+			adoptedPetProtocol: String!
+			coexistenceWithOtherPets: [String!]
+			isHealthyWithKids: Boolean!
+			isHealthyWithOtherPets: Boolean!
+			petPicture: Picture
+			isAvailableToBeAdopted: Boolean
+		}
+
 		type AdopterCuestionaire {
 			userId: ID!
 			id: ID!
@@ -148,7 +164,7 @@ module.exports = {
 		}
 
 		type Like {
-			petId: AdoptedCuestionaire!
+			petId: AdoptedCuestionairePlusUser!
 			userId: User!
 			date: String!
 		}
@@ -160,8 +176,9 @@ module.exports = {
 
 		type LikeUser {
 			userId: User!
-			likedUserId: User!
+			likedUserId: AdopterCuestionairePlusUser!
 			date: String!
+			# adopterCuestionaire: AdopterCuestionaire!
 		}
 
 		type ReturnLikeUser {
@@ -208,6 +225,10 @@ module.exports = {
 			likeUser(userId: String!, likedUserId: String!): String!
 			dislikePet(petId: String!, userId: String!): String!
 			dislikeUser(userId: String!, likedUserId: String!): String!
+			deleteLike(petId: String!, userId: String!): String!
+			trashLike(petId: String!, userId: String!): String!
+			deleteLikeUser(userId: String!, likedUserId: String!): String!
+			trashLikeUser(userId: String!, likedUserId: String!): String!
 		}
 	`,
 };

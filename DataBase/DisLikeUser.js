@@ -10,7 +10,7 @@ const schema = new Schema({
 	likedUserId: {
 		required: true,
 		type: Schema.Types.ObjectId,
-		ref: "User",
+		ref: "AdopterQuestionnaire",
 	},
 
 	date: {

@@ -20,5 +20,5 @@ const schema = new Schema({
 });
 
 module.exports = {
-	LikeUser: model("LikeUser", schema),
+	LikeUserTrash: model("LikeUserTrash", schema),
 };

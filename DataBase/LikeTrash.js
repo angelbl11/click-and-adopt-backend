@@ -1,16 +1,16 @@
 const { model, Schema } = require("mongoose");
 
 const schema = new Schema({
+	petId: {
+		required: true,
+		type: Schema.Types.ObjectId,
+		ref: "AdoptedQuestionnaire",
+	},
+
 	userId: {
 		required: true,
 		type: Schema.Types.ObjectId,
 		ref: "User",
-	},
-
-	likedUserId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "AdopterQuestionnaire",
 	},
 
 	date: {
@@ -20,5 +20,5 @@ const schema = new Schema({
 });
 
 module.exports = {
-	LikeUser: model("LikeUser", schema),
+	LikeTrash: model("LikeTrash", schema),
 };

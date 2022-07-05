@@ -7,6 +7,7 @@ const QuestionaireMutation = require("../Mutations/QuestionaireMutations");
 const UserMutation = require("../Mutations/UsersMutation");
 const LikeMutation = require("../Mutations/LikeMutation");
 const DislikeMutation = require("../Mutations/DislikeMutation");
+const LikesTrashMutation = require("../Mutations/LikesTrashMutation");
 
 module.exports = {
 	resolvers: {
@@ -24,6 +25,7 @@ module.exports = {
 			...UserMutation,
 			...LikeMutation,
 			...DislikeMutation,
+			...LikesTrashMutation,
 		},
 	},
 };

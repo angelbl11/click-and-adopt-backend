@@ -3,7 +3,10 @@ const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
 const { Dislike } = require("../../DataBase/Dislike");
 const { DislikeUser } = require("../../DataBase/DisLikeUser");
 const { Like } = require("../../DataBase/Like");
+const { LikeTrash } = require("../../DataBase/LikeTrash");
 const { LikeUser } = require("../../DataBase/LikeUser");
+const { LikeUserTrash } = require("../../DataBase/LikeUserTrash");
+const { trashLikeUser } = require("../Mutations/LikesTrashMutation");
 
 function shuffle(array) {
 	let currentIndex = array.length,
@@ -30,6 +33,7 @@ module.exports = {
 		const user = await AdopterQuestionnarie.findOne({ userId: userId });
 		const likes = await Like.find({ userId: userId });
 		const dislikes = await Dislike.find({ userId: userId });
+		const trashLikes = await LikeTrash.find({ userId: userId });
 
 		let pets = [];
 
@@ -53,6 +57,10 @@ module.exports = {
 							if (dislikeItem.petId == item.id) check = true;
 						});
 
+						trashLikes.map((trashItem) => {
+							if (trashItem.petId == item.id) check = true;
+						});
+
 						if (!check) pets.push(item);
 					});
 				}
@@ -68,8 +76,15 @@ module.exports = {
 	},
 	getRandomAdopter: async (parent, { userId }) => {
 		const user = await AdoptedQuestionnarie.findOne({ userId: userId });
-		const likes = await LikeUser.find({ userId: userId });
-		const dislikes = await DislikeUser.find({ userId: userId });
+		const likes = await LikeUser.find({ userId: userId }).populate(
+			"likedUserId"
+		);
+		const dislikes = await DislikeUser.find({ userId: userId }).populate(
+			"likedUserId"
+		);
+		const trashLikes = await LikeUserTrash.find({ userId: userId }).populate(
+			"likedUserId"
+		);
 
 		const adopters = await AdopterQuestionnarie.find({
 			petPreferences: { $in: [user.typeOfAdoptedPet] },
@@ -83,11 +98,15 @@ module.exports = {
 			let flag = false;
 
 			likes.map((item) => {
-				if (adopItem.userId.id == item.likedUserId) flag = true;
+				if (adopItem.userId.id == item.likedUserId.userId) flag = true;
 			});
 
 			dislikes.map((dislikeItem) => {
-				if (adopItem.userId.id == dislikeItem.likedUserId) flag = true;
+				if (adopItem.userId.id == dislikeItem.likedUserId.userId) flag = true;
+			});
+
+			trashLikes.map((trashItem) => {
+				if (adopItem.userId.id == trashItem.likedUserId.userId) flag = true;
 			});
 
 			if (!flag) newAdopters.push(adopItem);
