@@ -1,55 +1,71 @@
 const { Like } = require("../../DataBase/Like");
 const { LikeUser } = require("../../DataBase/LikeUser");
 
+const date = new Date();
+
+date.setHours(0, 0, 0, 0);
+
+function padTo2Digits(num) {
+  return num.toString().padStart(2, "0");
+}
+
+function formatDate(date) {
+  return [
+    padTo2Digits(date.getDate()),
+    padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join("-");
+}
+
 module.exports = {
-	likePet: async (parent, { petId, userId }) => {
-		const likes = await Like.find({ userId: userId });
+  likePet: async (parent, { petId, userId }) => {
+    const likes = await Like.find({ userId: userId });
 
-		let flag = false;
+    let flag = false;
 
-		likes.map((item) => {
-			if (petId == item.petId) {
-				console.log("se repite: " + item);
-				flag = true;
-			}
-		});
+    likes.map((item) => {
+      if (petId == item.petId) {
+        console.log("se repite: " + item);
+        flag = true;
+      }
+    });
 
-		if (flag) throw new Error("Like repetido");
+    if (flag) throw new Error("Like repetido");
 
-		if (likes.length > 10) throw new Error("Limite excedido");
+    if (likes.length > 10) throw new Error("Limite excedido");
 
-		await new Like({
-			petId: petId,
-			userId: userId,
-			date: new Date().toLocaleString().replace(/:.. /, " "),
-		}).save();
+    await new Like({
+      petId: petId,
+      userId: userId,
+      date: formatDate(new Date()),
+    }).save();
 
-		return "Like";
-	},
+    return "Like";
+  },
 
-	likeUser: async (parent, { userId, likedUserId }) => {
-		const likes = await LikeUser.find({ userId: userId });
+  likeUser: async (parent, { userId, likedUserId }) => {
+    const likes = await LikeUser.find({ userId: userId });
 
-		let flag = false;
+    let flag = false;
 
-		likes.map((item) => {
-			if (likedUserId == item.likedUserId) {
-				console.log(item.likedUserId);
-				flag = true;
-			} else {
-			}
-		});
+    likes.map((item) => {
+      if (likedUserId == item.likedUserId) {
+        console.log(item.likedUserId);
+        flag = true;
+      } else {
+      }
+    });
 
-		if (flag) throw new Error("Like repetido");
+    if (flag) throw new Error("Like repetido");
 
-		if (likes.length > 10) throw new Error("Limite excedido");
+    if (likes.length > 10) throw new Error("Limite excedido");
 
-		await new LikeUser({
-			userId: userId,
-			likedUserId: likedUserId,
-			date: new Date().toLocaleString().replace(/:.. /, " "),
-		}).save();
+    await new LikeUser({
+      userId: userId,
+      likedUserId: likedUserId,
+      date: formatDate(new Date()),
+    }).save();
 
-		return "like";
-	},
+    return "like";
+  },
 };
