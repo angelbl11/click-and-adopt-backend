@@ -10,8 +10,8 @@ module.exports = {
   formatDate(date) {
     return [
       padTo2Digits(date.getDate()),
-      date.getFullYear(),
       padTo2Digits(date.getMonth() + 1),
+      date.getFullYear(),
     ].join("-");
   },
 };
