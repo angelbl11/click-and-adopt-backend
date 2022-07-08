@@ -1,105 +1,69 @@
 const { generateToken } = require("../../Auth/GenerateToken");
 const { User } = require("../../DataBase/User");
 const { hash, compare } = require("bcryptjs");
-const { validateRegister } = require("../../Auth/ValidateRegister");
-const { UserInputError } = require("apollo-server-core");
 
 module.exports = {
-	register: async (parent, { registerInput }, context, info) => {
-		try {
-			const { account, age, email, fullName } = registerInput;
-			let { password } = registerInput;
+  register: async (parent, { registerInput }, context, info) => {
+    const { account, age, email, fullName } = registerInput;
+    let { password } = registerInput;
+    const isEmailTaken = await User.findOne({ email: email });
 
-			const { errors, isValid } = validateRegister(
-				registerInput.fullName,
-				registerInput.email,
-				registerInput.password,
-				registerInput.repeatPassword
-			);
+    if (isEmailTaken) {
+      throw new Error("Ya existe una cuenta registrada con este correo");
+    }
 
-			if (!isValid) {
-				throw new UserInputError("Errors", { errors });
-			}
+    password = await hash(password, 10);
 
-			const isEmailTaken = await User.findOne({ email: email });
+    const user = await new User({
+      account: account,
+      age: age,
+      email: email,
+      fullName: fullName,
+      password: password,
+    }).save();
 
-			if (isEmailTaken) {
-				throw new UserInputError("Email, is taken", {
-					errors: {
-						email: "Ya existe una cuenta con este email",
-					},
-				});
-			}
+    const token = generateToken(
+      user.id,
+      user.email,
+      user.account,
+      user.age,
+      user.fullName
+    );
 
-			password = await hash(password, 10);
+    const userToReturn = {
+      ...user._doc,
+      id: user.id,
+      token: token,
+    };
 
-			const user = await new User({
-				account: account,
-				age: age,
-				email: email,
-				fullName: fullName,
-				password: password,
-			}).save();
+    return userToReturn;
+  },
 
-			const token = generateToken(
-				user.id,
-				user.email,
-				user.account,
-				user.age,
-				user.fullName
-			);
+  login: async (parent, { loginInput }) => {
+    const { email, password } = loginInput;
 
-			const userToReturn = {
-				...user._doc,
-				id: user.id,
-				token: token,
-			};
+    const user = await User.findOne({ email: email });
 
-			return userToReturn;
-		} catch (error) {
-			console.log(error);
-		}
-	},
+    if (!user)
+      throw new Error("No existe un usuario con los datos proporcionados");
 
-	login: async (parent, { loginInput }) => {
-		try {
-			const { email, password } = loginInput;
+    if (!(await compare(password, user.password)))
+      throw new Error("Contraseña incorrecta");
 
-			const user = await User.findOne({ email: email });
+    const token = generateToken(
+      user.id,
+      user.email,
+      user.account,
+      user.age,
+      user.fullName
+    );
 
-			if (!user) {
-				throw new UserInputError("Email, not exist", {
-					errors: {
-						email: "No existe una cuenta con este email",
-					},
-				});
-			}
+    const userToReturn = {
+      ...user._doc,
+      id: user.id,
+      token: token,
+    };
 
-			if (!(await compare(password, user.password))) {
-				throw new UserInputError("Wrong Credentials, bad password", {
-					errors: {
-						password: "Contraseña incorrecta",
-					},
-				});
-			}
-
-			const token = generateToken(
-				user.id,
-				user.email,
-				user.account,
-				user.age,
-				user.fullName
-			);
-
-			const userToReturn = {
-				...user._doc,
-				id: user.id,
-				token: token,
-			};
-
-			return userToReturn;
-		} catch (error) {
-			console.log(error);
-		}
-	},
+    return userToReturn;
+  },
 };

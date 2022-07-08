@@ -111,8 +111,8 @@ module.exports = {
   },
   deletePetInfo: async (parent, { petId }) => {
     try {
-      await AdoptedQuestionnarie.findByIdAndDelete(petId);
-
+      let petInfoToDelete = AdoptedQuestionnarie.findByIdAndDelete(petId);
+      await petInfoToDelete;
       return "eliminado";
     } catch (error) {
       throw new Error(error);

@@ -6,7 +6,6 @@ const { Like } = require("../../DataBase/Like");
 const { LikeTrash } = require("../../DataBase/LikeTrash");
 const { LikeUser } = require("../../DataBase/LikeUser");
 const { LikeUserTrash } = require("../../DataBase/LikeUserTrash");
-const { trashLikeUser } = require("../Mutations/LikesTrashMutation");
 
 function shuffle(array) {
   let currentIndex = array.length,
