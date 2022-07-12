@@ -4,39 +4,74 @@ const { LikeUser } = require("../../DataBase/LikeUser");
 const { LikeUserTrash } = require("../../DataBase/LikeUserTrash");
 const { formatDate } = require("../../dateFormating");
 module.exports = {
-  deleteLike: async (parent, { petId, userId }) => {
-    await Like.deleteOne({ userId: userId, petId: petId });
+	deleteLike: async (parent, { petId, userId }) => {
+		await Like.deleteOne({ userId: userId, petId: petId });
 
-    return "Like borrado";
-  },
+		return "Like borrado";
+	},
 
-  trashLike: async (parent, { petId, userId }) => {
-    await Like.deleteOne({ userId: userId, petId: petId });
+	trashLike: async (parent, { petId, userId }) => {
+		await Like.deleteOne({ userId: userId, petId: petId });
 
-    await new LikeTrash({
-      petId: petId,
-      userId: userId,
-      date: formatDate(new Date()),
-    }).save();
+		await new LikeTrash({
+			petId: petId,
+			userId: userId,
+			date: formatDate(new Date()),
+		}).save();
 
-    return "like borrado";
-  },
+		return "like borrado";
+	},
 
-  deleteLikeUser: async (parent, { userId, likedUserId }) => {
-    await LikeUser.deleteOne({ userId: userId, likedUserId: likedUserId });
+	reverseTrashLike: async (parent, { petId, userId }) => {
+		const numOfLike = await Like.count({ userId: userId });
 
-    return "Like borrado";
-  },
+		if (numOfLike > 9) throw new Error("Limite excedido");
 
-  trashLikeUser: async (parent, { userId, likedUserId }) => {
-    await LikeUser.deleteOne({ userId: userId, likedUserId: likedUserId });
+		await LikeTrash.deleteOne({ petId: petId, userId: userId });
 
-    await new LikeUserTrash({
-      userId: userId,
-      likedUserId: likedUserId,
-      date: formatDate(new Date()),
-    }).save();
+		await new Like({
+			petId: petId,
+			userId: userId,
+			date: formatDate(new Date()),
+		}).save();
 
-    return "Like borrado";
-  },
+		return "Like";
+	},
+
+	deleteLikeUser: async (parent, { userId, likedUserId }) => {
+		await LikeUser.deleteOne({ userId: userId, likedUserId: likedUserId });
+
+		return "Like borrado";
+	},
+
+	trashLikeUser: async (parent, { userId, likedUserId }) => {
+		await LikeUser.deleteOne({ userId: userId, likedUserId: likedUserId });
+
+		await new LikeUserTrash({
+			userId: userId,
+			likedUserId: likedUserId,
+			date: formatDate(new Date()),
+		}).save();
+
+		return "Like borrado";
+	},
+
+	reverseTrashLikeUser: async (parent, { userId, likedUserId }) => {
+		const numOfLikes = await LikeUser.count({
+			userId: userId,
+			likedUserId: likedUserId,
+		});
+
+		if (numOfLikes > 9) throw new Error("Limite excedido");
+
+		await LikeUserTrash.deleteOne({ userId: userId, likedUserId: likedUserId });
+
+		await new LikeUser({
+			userId: userId,
+			likedUserId: likedUserId,
+			date: formatDate(new Date()),
+		}).save();
+
+		return "Like";
+	},
 };
