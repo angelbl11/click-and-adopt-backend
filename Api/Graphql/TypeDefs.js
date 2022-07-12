@@ -192,7 +192,7 @@ module.exports = {
 		}
 
 		type RandomUsers {
-			users: [AdopterCuestionairePlusUser!]
+			users: [AdopterCuestionairePlusUser]
 			numOfLikes: Int!
 		}
 
@@ -203,6 +203,8 @@ module.exports = {
 			getRandomAdopter(userId: String!): RandomUsers
 			getPetsLikes(userId: String!): ReturnLike!
 			getUserLikes(userId: String!): ReturnLikeUser!
+			getPetsTrashLikes(userId: String!): ReturnLike!
+			getUsersTrashLikes(userId: String!): ReturnLikeUser!
 		}
 
 		type Mutation {
