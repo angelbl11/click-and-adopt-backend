@@ -8,6 +8,7 @@ const UserMutation = require("../Mutations/UsersMutation");
 const LikeMutation = require("../Mutations/LikeMutation");
 const DislikeMutation = require("../Mutations/DislikeMutation");
 const LikesTrashMutation = require("../Mutations/LikesTrashMutation");
+const MatchesQueries = require("../Queries/MatchesQueries");
 
 module.exports = {
 	resolvers: {
@@ -17,6 +18,7 @@ module.exports = {
 			...UserQueries,
 			...RandomQueries,
 			...LikesQueries,
+			...MatchesQueries
 		},
 
 		Mutation: {

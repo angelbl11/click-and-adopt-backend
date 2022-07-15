@@ -1,56 +1,89 @@
 const { Like } = require("../../DataBase/Like");
 const { LikeUser } = require("../../DataBase/LikeUser");
 const { formatDate } = require("../../dateFormating");
+const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
+const { Match } = require("../../DataBase/Match");
+const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
+
+const match = async (adopterInfo, petOwnerInfo, petInvolved) => {
+	await new Match({
+		adopterInfo: adopterInfo,
+		petOwnerInfo: petOwnerInfo,
+		petInvolved: petInvolved,
+	}).save();
+};
 
 module.exports = {
-  likePet: async (parent, { petId, userId }) => {
-    const likes = await Like.find({ userId: userId });
+	likePet: async (parent, { petId, userId }) => {
+		const likes = await Like.find({ userId: userId });
 
-    let flag = false;
+		likes.map((item) => {
+			if (petId == item.petId) throw new Error("Like repetido");
+		});
 
-    likes.map((item) => {
-      if (petId == item.petId) {
-        console.log("se repite: " + item);
-        flag = true;
-      }
-    });
+		if (likes.length > 10) throw new Error("Limite excedido");
 
-    if (flag) throw new Error("Like repetido");
+		const petOwner = await AdoptedQuestionnarie.findById(petId);
 
-    if (likes.length > 10) throw new Error("Limite excedido");
+		const ownerLikes = await LikeUser.findOne({
+			userId: petOwner.userId,
+			likedUserId: userId,
+		});
 
-    await new Like({
-      petId: petId,
-      userId: userId,
-      date: formatDate(new Date()),
-    }).save();
+		if (ownerLikes) {
+			match(userId, petOwner.userId, petId);
 
-    return "Like";
-  },
+			await LikeUser.findOneAndDelete({
+				userId: petOwner.userId,
+				likedUserId: userId,
+			});
 
-  likeUser: async (parent, { userId, likedUserId }) => {
-    const likes = await LikeUser.find({ userId: userId });
+			return "Match";
+		}
 
-    let flag = false;
+		await new Like({
+			petId: petId,
+			userId: userId,
+			date: formatDate(new Date()),
+		}).save();
 
-    likes.map((item) => {
-      if (likedUserId == item.likedUserId) {
-        console.log(item.likedUserId);
-        flag = true;
-      } else {
-      }
-    });
+		return "Like";
+	},
 
-    if (flag) throw new Error("Like repetido");
+	likeUser: async (parent, { userId, likedUserId }) => {
+		const likes = await LikeUser.find({ userId: userId });
 
-    if (likes.length > 10) throw new Error("Limite excedido");
+		likes.map((item) => {
+			if (likedUserId == item.likedUserId) throw new Error("Like repetido");
+		});
 
-    await new LikeUser({
-      userId: userId,
-      likedUserId: likedUserId,
-      date: formatDate(new Date()),
-    }).save();
+		if (likes.length > 10) throw new Error("Limite excedido");
 
-    return "like";
-  },
+		const adopterId = await AdopterQuestionnarie.findById(likedUserId);
+
+		const adopterLikes = await Like.find({ userId: adopterId.userId });
+
+		for (const item of adopterLikes) {
+			const checkIfMatch = await AdoptedQuestionnarie.findById(item.petId);
+
+			if (checkIfMatch.userId == userId) {
+				match(adopterId.userId, userId, item.petId);
+
+				await Like.findOneAndDelete({
+					petId: item.petId,
+					userId: adopterId.userId,
+				});
+
+				return "match";
+			}
+		}
+
+		await new LikeUser({
+			userId: userId,
+			likedUserId: likedUserId,
+			date: formatDate(new Date()),
+		}).save();
+
+		return "like";
+	},
 };

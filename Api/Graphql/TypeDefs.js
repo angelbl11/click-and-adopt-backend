@@ -196,6 +196,12 @@ module.exports = {
 			numOfLikes: Int!
 		}
 
+		type Match {
+			adopterInfo: User!
+			petOwnerInfo: User!
+			petInvolved: AdoptedCuestionaire!
+		}
+
 		type Query {
 			getAdopterInfo(id: String!): AdopterInfo!
 			getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
@@ -205,6 +211,7 @@ module.exports = {
 			getUserLikes(userId: String!): ReturnLikeUser!
 			getPetsTrashLikes(userId: String!): ReturnLike!
 			getUsersTrashLikes(userId: String!): ReturnLikeUser!
+			getMatches(userId: String!): [Match!]
 		}
 
 		type Mutation {
