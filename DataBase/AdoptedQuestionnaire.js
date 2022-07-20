@@ -62,6 +62,14 @@ const schema = new Schema({
     mimetype: String,
     encoding: String,
   },
+  petProtocol: [
+    {
+      required: false,
+      filename: String,
+      mimetype: String,
+      encoding: String,
+    },
+  ],
 });
 
 module.exports = {

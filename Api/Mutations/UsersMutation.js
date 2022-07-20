@@ -109,6 +109,32 @@ module.exports = {
       console.log(error);
     }
   },
+  addProtocolFile: async (parent, { id, protocolFile, fileName }) => {
+    try {
+      const { createReadStream, mimetype, encoding } = await protocolFile;
+
+      const { ext } = path.parse(fileName);
+
+      const stream = createReadStream();
+
+      const pathName = path.join(
+        __dirname,
+        `../../Images/ProfilePictures/${fileName}`
+      );
+
+      await stream.pipe(fs.createWriteStream(pathName));
+      const user = await AdoptedQuestionnarie.findById(id);
+      user.petProtocol.push({
+        filename: fileName,
+        mimetype: mimetype,
+        encoding: encoding,
+      });
+      user.save();
+      return "Listo";
+    } catch (error) {
+      console.log(error);
+    }
+  },
   deletePetInfo: async (parent, { petId }) => {
     try {
       let petInfoToDelete = AdoptedQuestionnarie.findByIdAndDelete(petId);
