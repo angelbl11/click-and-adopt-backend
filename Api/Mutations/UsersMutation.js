@@ -117,10 +117,7 @@ module.exports = {
 
       const stream = createReadStream();
 
-      const pathName = path.join(
-        __dirname,
-        `../../Images/ProfilePictures/${fileName}`
-      );
+      const pathName = path.join(__dirname, `../../PetFiles/${fileName}`);
 
       await stream.pipe(fs.createWriteStream(pathName));
       const user = await AdoptedQuestionnarie.findById(id);
