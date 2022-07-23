@@ -250,7 +250,7 @@ module.exports = {
       reverseTrashLike(petId: String!, userId: String!): String!
       reverseTrashLikeUser(userId: String!, likedUserId: String!): String!
       addProtocolFile(
-        id: String!
+        addProtocolFileId: String!
         protocolFile: Upload!
         fileName: String!
       ): String!
