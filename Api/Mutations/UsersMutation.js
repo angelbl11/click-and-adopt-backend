@@ -109,7 +109,10 @@ module.exports = {
       console.log(error);
     }
   },
-  addProtocolFile: async (parent, { id, protocolFile, fileName }) => {
+  addProtocolFile: async (
+    parent,
+    { addProtocolFileId, protocolFile, fileName }
+  ) => {
     try {
       const { createReadStream, mimetype, encoding } = await protocolFile;
 
@@ -123,7 +126,7 @@ module.exports = {
       );
 
       await stream.pipe(fs.createWriteStream(pathName));
-      const user = await AdoptedQuestionnarie.findById(id);
+      const user = await AdoptedQuestionnarie.findById(addProtocolFileId);
       user.petProtocol.push({
         filename: fileName,
         mimetype: mimetype,
