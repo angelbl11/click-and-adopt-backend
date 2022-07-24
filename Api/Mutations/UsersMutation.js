@@ -86,6 +86,7 @@ module.exports = {
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         ) === false
       ) {
+        console.log("imagen no valida");
         throw new Error("No es una imagen valida");
       }
 
@@ -96,7 +97,7 @@ module.exports = {
           encoding: encoding,
         },
       });
-
+      console.log("imagen valida");
       return "Listo";
     } catch (error) {
       console.log(error);
