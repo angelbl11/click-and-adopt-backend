@@ -10,7 +10,6 @@ const { graphqlUploadExpress } = require("graphql-upload");
 const { DB_URL } = require("./config");
 const { typeDefinitions } = require("./Api/Graphql/TypeDefs");
 const { resolvers } = require("./Api/Graphql/Resolvers");
-const path = require("path");
 
 const startServer = async () => {
   const app = express();
@@ -62,7 +61,4 @@ mongoose
   .then(() => {
     console.log("Set up ready");
     startServer();
-    console.log(
-      path.join(__dirname, `../../Images/ProfilePictures/${image}` + ".jpg")
-    );
   });
