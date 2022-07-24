@@ -16,7 +16,8 @@ const vision = require("@google-cloud/vision");
 const path = require("path");
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
-const image = "https://calm-forest-47055.herokuapp.com/ProfilePictures/85339613796214984687434876931536573461292592031.jpg";
+const image =
+  "https://calm-forest-47055.herokuapp.com/ProfilePictures/85339613796214984687434876931536573461292592031.jpg";
 
 const startServer = async () => {
   const app = express();
@@ -67,12 +68,12 @@ mongoose
   .connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("Set up ready");
-    console.log(path.join(
-				__dirname,
-				`../../Images/ProfilePictures/${image}` + ".jpg"
-			))
-    
-      detectFaces(image)
+    startServer();
+    console.log(
+      path.join(__dirname, `../../Images/ProfilePictures/${image}` + ".jpg")
+    );
+
+    detectFaces(image);
   });
 
 async function detectFaces(inputFile) {
@@ -80,11 +81,11 @@ async function detectFaces(inputFile) {
   const results = await client.faceDetection(inputFile);
   const faces = results[0].faceAnnotations;
   const numFaces = faces.length;
-  console.log(`Found ${numFaces} face${numFaces === 1 ? '' : 's'}.`);
-  if(numFaces > 0){
-    console.log("si hay una persona")
-  }else {
-    console.log("no hay una persona")
+  console.log(`Found ${numFaces} face${numFaces === 1 ? "" : "s"}.`);
+  if (numFaces > 0) {
+    console.log("si hay una persona");
+  } else {
+    console.log("no hay una persona");
   }
   return faces;
 }
