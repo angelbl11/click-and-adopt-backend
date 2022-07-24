@@ -82,9 +82,9 @@ module.exports = {
       await stream.pipe(fs.createWriteStream(pathName));
 
       if (
-        detectFaces(
+        (await detectFaces(
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-        ) === false
+        )) === false
       ) {
         console.log("imagen no valida");
         throw new Error("No es una imagen valida");
