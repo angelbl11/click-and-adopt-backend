@@ -47,9 +47,10 @@ async function detectFaces(inputFile) {
   const numFaces = faces.length;
   console.log(`Found ${numFaces} face${numFaces === 1 ? "" : "s"}.`);
   if (numFaces > 0) {
+    console.log("verdadero, supera cero");
     return true;
   }
-
+  console.log("falso, es cero");
   return false;
 }
 
