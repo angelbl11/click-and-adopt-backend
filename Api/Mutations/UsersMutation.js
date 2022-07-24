@@ -102,21 +102,6 @@ module.exports = {
       console.log(error);
     }
   },
-  scanPicture: (parent, { url }) => {
-    client
-      .labelDetection(url)
-      .then((results) => {
-        console.log(results);
-        const labels = results[0].labelAnnotations;
-        console.log("Labels:");
-        console.log(labels[0].description);
-        labels.forEach((label) => console.log(label.description));
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
-    return "Imagen analizada";
-  },
 
   deletePetInfo: async (parent, { petId }) => {
     try {
