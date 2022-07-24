@@ -40,6 +40,19 @@ const scanPetPicture = (url) => {
 	return "Imagen analizada";
 };
 
+async function detectFaces(inputFile) {
+	// Make a call to the Vision API to detect the faces
+	const results = await client.faceDetection(inputFile);
+	const faces = results[0].faceAnnotations;
+	const numFaces = faces.length;
+	console.log(`Found ${numFaces} face${numFaces === 1 ? "" : "s"}.`);
+	if (numFaces > 0) {
+		return true;
+	}
+
+	return false;
+}
+
 module.exports = {
 	addProfilePicture: async (parent, { id, profilePicture }) => {
 		try {
@@ -66,6 +79,10 @@ module.exports = {
 			);
 
 			await stream.pipe(fs.createWriteStream(pathName));
+
+			if (detectFaces(`https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`) == false) {
+				throw new Error("No es una imagen valida");
+			}
 
 			await User.findByIdAndUpdate(id, {
 				profilePicture: {
@@ -129,13 +146,13 @@ module.exports = {
 				`../../Images/ProfilePictures/${randomfileName}` + ".jpg"
 			);
 
-      console.log(pathName);
+			console.log(pathName);
 
 			await stream.pipe(fs.createWriteStream(pathName));
 
-      if(scanPetPicture(pathName) == false ) {
-        throw new Error("La imagen no es de una mascota válida");
-      }
+			if (scanPetPicture(`https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`) == false) {
+				throw new Error("La imagen no es de una mascota válida");
+			}
 
 			await AdoptedQuestionnarie.findByIdAndUpdate(id, {
 				petPicture: {
