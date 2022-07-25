@@ -7,39 +7,31 @@ const fs = require("fs");
 const vision = require("@google-cloud/vision");
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
-const scanPetPicture = (url) => {
-  client
-    .labelDetection(url)
-    .then((results) => {
-      console.log(results);
-      const labels = results[0].labelAnnotations;
-      console.log("Labels:");
-      if (
-        labels[0].description == "Cat" ||
-        labels[0].description == "cat" ||
-        labels[0].description == "Dog" ||
-        labels[0].description == "dog" ||
-        labels[1].description == "Cat" ||
-        labels[1].description == "cat" ||
-        labels[1].description == "Dog" ||
-        labels[1].description == "dog" ||
-        labels[2].description == "Cat" ||
-        labels[2].description == "cat" ||
-        labels[2].description == "Dog" ||
-        labels[2].description == "dog"
-      ) {
-        return true;
-      }
-
-      labels.forEach((label) => console.log(label.description));
-      console.log("falso, no es mascota");
-      return false;
-    })
-    .catch((err) => {
-      console.log("Error:", err);
-    });
-  console.log("es mascota");
-  return "Imagen analizada";
+const scanPetPicture = async (url) => {
+  const results = await client.labelDetection();
+  console.log(results);
+  const labels = results[0].labelAnnotations;
+  console.log("Labels:");
+  if (
+    labels[0].description == "Cat" ||
+    labels[0].description == "cat" ||
+    labels[0].description == "Dog" ||
+    labels[0].description == "dog" ||
+    labels[1].description == "Cat" ||
+    labels[1].description == "cat" ||
+    labels[1].description == "Dog" ||
+    labels[1].description == "dog" ||
+    labels[2].description == "Cat" ||
+    labels[2].description == "cat" ||
+    labels[2].description == "Dog" ||
+    labels[2].description == "dog"
+  ) {
+    console.log("es mascota");
+    return true;
+  }
+  labels.forEach((label) => console.log(label.description));
+  console.log("falso, no es mascota");
+  return false;
 };
 
 async function detectFaces(inputFile) {
