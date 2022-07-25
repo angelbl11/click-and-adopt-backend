@@ -135,9 +135,9 @@ module.exports = {
       await stream.pipe(fs.createWriteStream(pathName));
 
       if (
-        scanPetPicture(
+        (await scanPetPicture(
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-        ) == false
+        )) == false
       ) {
         throw new Error("La imagen no es de una mascota válida");
       }
