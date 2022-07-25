@@ -83,7 +83,7 @@ module.exports = {
       )) == false
     ) {
       throw new Error(
-        "Por favor, utilice una fotografía suya; además, se recomienda que en esta se aprecie correctamente el rostro, sin accesorios que lo obstruyan y se pueda visualizar de frente."
+        "Por favor, utilice una fotografía suya; además, se recomienda que en esta se aprecie correctamente el rostro, sin accesorios que lo obstruyan y se pueda visualizar de frente. En caso de que la fotografía que intenta subir cumpla los requisitos, por favor, vuelva a intentar el proceso."
       );
     }
 
