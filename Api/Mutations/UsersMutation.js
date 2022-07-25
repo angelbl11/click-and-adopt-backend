@@ -8,7 +8,7 @@ const vision = require("@google-cloud/vision");
 const client = new vision.ImageAnnotatorClient(CONFIG);
 
 const scanPetPicture = async (url) => {
-  const results = await client.labelDetection();
+  const results = await client.labelDetection(url);
   console.log(results);
   const labels = results[0].labelAnnotations;
   console.log("Labels:");
