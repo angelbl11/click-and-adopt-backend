@@ -101,54 +101,49 @@ module.exports = {
     }
   },
   addProfilePetPicture: async (parent, { id, petProfilePicture }) => {
-    try {
-      const { createReadStream, filename, mimetype, encoding } =
-        await petProfilePicture;
+    const { createReadStream, filename, mimetype, encoding } =
+      await petProfilePicture;
 
-      const { ext } = path.parse(filename);
+    const { ext } = path.parse(filename);
 
-      let randomfileName = "";
+    let randomfileName = "";
 
-      for (let i = 0; i < 15; i++) {
-        randomfileName += Math.floor(Math.random() * 1000) + "";
-      }
-
-      const date = new Date();
-      randomfileName +=
-        date.getDay() + date.getMonth() + date.getFullYear() + "";
-
-      const stream = createReadStream();
-
-      const pathName = path.join(
-        __dirname,
-        `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
-      );
-
-      console.log(pathName);
-
-      await stream.pipe(fs.createWriteStream(pathName));
-
-      if (
-        (await scanPetPicture(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-        )) == false
-      ) {
-        console.log("no es una imagen valida");
-        throw new Error("La imagen no es de una mascota válida");
-      }
-
-      await AdoptedQuestionnarie.findByIdAndUpdate(id, {
-        petPicture: {
-          filename: randomfileName + ".jpg",
-          mimetype: mimetype,
-          encoding: encoding,
-        },
-      });
-      console.log("es una imagen valida");
-      return "Listo";
-    } catch (error) {
-      console.log(error);
+    for (let i = 0; i < 15; i++) {
+      randomfileName += Math.floor(Math.random() * 1000) + "";
     }
+
+    const date = new Date();
+    randomfileName += date.getDay() + date.getMonth() + date.getFullYear() + "";
+
+    const stream = createReadStream();
+
+    const pathName = path.join(
+      __dirname,
+      `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
+    );
+
+    console.log(pathName);
+
+    await stream.pipe(fs.createWriteStream(pathName));
+
+    if (
+      (await scanPetPicture(
+        `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
+      )) == false
+    ) {
+      console.log("no es una imagen valida");
+      throw new Error("La imagen no es de una mascota válida");
+    }
+
+    await AdoptedQuestionnarie.findByIdAndUpdate(id, {
+      petPicture: {
+        filename: randomfileName + ".jpg",
+        mimetype: mimetype,
+        encoding: encoding,
+      },
+    });
+    console.log("es una imagen valida");
+    return "Listo";
   },
   addProtocolFile: async (parent, { id, protocolFile, fileName }) => {
     try {
