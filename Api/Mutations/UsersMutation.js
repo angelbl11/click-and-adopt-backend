@@ -32,11 +32,13 @@ const scanPetPicture = (url) => {
       }
 
       labels.forEach((label) => console.log(label.description));
+      console.log("falso, no es mascota");
       return false;
     })
     .catch((err) => {
       console.log("Error:", err);
     });
+  console.log("es mascota");
   return "Imagen analizada";
 };
 
@@ -139,6 +141,7 @@ module.exports = {
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         )) == false
       ) {
+        console.log("no es una imagen valida");
         throw new Error("La imagen no es de una mascota válida");
       }
 
@@ -149,7 +152,7 @@ module.exports = {
           encoding: encoding,
         },
       });
-
+      console.log("es una imagen valida");
       return "Listo";
     } catch (error) {
       console.log(error);
