@@ -13,18 +13,18 @@ const scanPetPicture = async (url) => {
   const labels = results[0].labelAnnotations;
   console.log("Labels:");
   if (
-    labels[0].description == "Cat" ||
-    labels[0].description == "cat" ||
-    labels[0].description == "Dog" ||
-    labels[0].description == "dog" ||
-    labels[1].description == "Cat" ||
-    labels[1].description == "cat" ||
-    labels[1].description == "Dog" ||
-    labels[1].description == "dog" ||
-    labels[2].description == "Cat" ||
-    labels[2].description == "cat" ||
-    labels[2].description == "Dog" ||
-    labels[2].description == "dog"
+    labels[0]?.description == "Cat" ||
+    labels[0]?.description == "cat" ||
+    labels[0]?.description == "Dog" ||
+    labels[0]?.description == "dog" ||
+    labels[1]?.description == "Cat" ||
+    labels[1]?.description == "cat" ||
+    labels[1]?.description == "Dog" ||
+    labels[1]?.description == "dog" ||
+    labels[2]?.description == "Cat" ||
+    labels[2]?.description == "cat" ||
+    labels[2]?.description == "Dog" ||
+    labels[2]?.description == "dog"
   ) {
     console.log("es mascota");
     return true;
