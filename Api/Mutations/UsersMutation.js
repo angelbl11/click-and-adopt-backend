@@ -46,12 +46,13 @@ async function detectFaces(inputFile) {
   const faces = results[0].faceAnnotations;
   const numFaces = faces.length;
   console.log(`Found ${numFaces} face${numFaces === 1 ? "" : "s"}.`);
-  if (numFaces > 0) {
+  if (numFaces == 1) {
     console.log("verdadero, supera cero");
     return true;
+  } else {
+    console.log("falso, es cero");
+    return false;
   }
-  console.log("falso, es cero");
-  return false;
 }
 
 module.exports = {
@@ -84,7 +85,7 @@ module.exports = {
       if (
         (await detectFaces(
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-        )) === false
+        )) == false
       ) {
         console.log("imagen no valida");
         throw new Error("No es una imagen valida");
