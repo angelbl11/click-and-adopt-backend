@@ -45,64 +45,56 @@ async function detectFaces(inputFile) {
   const results = await client.faceDetection(inputFile);
   const faces = results[0].faceAnnotations;
   const numFaces = faces.length;
-  console.log(`Found ${numFaces} face${numFaces === 1 ? "" : "s"}.`);
   if (numFaces == 1) {
-    console.log("verdadero, supera cero");
     return true;
   } else {
-    console.log("falso, es cero");
     return false;
   }
 }
 
 module.exports = {
   addProfilePicture: async (parent, { id, profilePicture }) => {
-    try {
-      const { createReadStream, filename, mimetype, encoding } =
-        await profilePicture;
+    const { createReadStream, filename, mimetype, encoding } =
+      await profilePicture;
 
-      const { ext } = path.parse(filename);
+    const { ext } = path.parse(filename);
 
-      let randomfileName = "";
+    let randomfileName = "";
 
-      for (let i = 0; i < 15; i++) {
-        randomfileName += Math.floor(Math.random() * 1000) + "";
-      }
-
-      const date = new Date();
-      randomfileName +=
-        date.getDay() + date.getMonth() + date.getFullYear() + "";
-
-      const stream = createReadStream();
-
-      const pathName = path.join(
-        __dirname,
-        `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
-      );
-
-      await stream.pipe(fs.createWriteStream(pathName));
-
-      if (
-        (await detectFaces(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-        )) == false
-      ) {
-        console.log("imagen no valida");
-        throw new Error("No es una imagen valida");
-      }
-
-      await User.findByIdAndUpdate(id, {
-        profilePicture: {
-          filename: randomfileName + ".jpg",
-          mimetype: mimetype,
-          encoding: encoding,
-        },
-      });
-      console.log("imagen valida");
-      return "Listo";
-    } catch (error) {
-      console.log(error);
+    for (let i = 0; i < 15; i++) {
+      randomfileName += Math.floor(Math.random() * 1000) + "";
     }
+
+    const date = new Date();
+    randomfileName += date.getDay() + date.getMonth() + date.getFullYear() + "";
+
+    const stream = createReadStream();
+
+    const pathName = path.join(
+      __dirname,
+      `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
+    );
+
+    await stream.pipe(fs.createWriteStream(pathName));
+
+    if (
+      (await detectFaces(
+        `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
+      )) == false
+    ) {
+      throw new Error(
+        "Por favor, utilice una fotografía donde se aprecie correctamente el rostro de frente."
+      );
+    }
+
+    await User.findByIdAndUpdate(id, {
+      profilePicture: {
+        filename: randomfileName + ".jpg",
+        mimetype: mimetype,
+        encoding: encoding,
+      },
+    });
+    return "Listo";
   },
 
   deletePetInfo: async (parent, { petId }) => {
