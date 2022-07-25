@@ -82,11 +82,9 @@ module.exports = {
     if (
       (await detectFaces(
         `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
-      )) === false
-    ) {
-      console.log("imagen no valida");
-      throw new Error("No es una imagen valida");
-    }
+      )) == false
+    )
+      throw new Error("No es una imagen válida");
 
     await User.findByIdAndUpdate(id, {
       profilePicture: {
