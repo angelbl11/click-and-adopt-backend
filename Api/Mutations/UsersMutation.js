@@ -81,14 +81,14 @@ module.exports = {
 
     const pathName = path.join(
       __dirname,
-      `../../Images/ProfilePictures/${randomfileName}` + ".png"
+      `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
     );
 
     await stream.pipe(fs.createWriteStream(pathName));
 
     if (
       (await detectFaces(
-        `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.png`
+        `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
       )) == false
     ) {
       throw new Error(
@@ -98,7 +98,7 @@ module.exports = {
 
     await User.findByIdAndUpdate(id, {
       profilePicture: {
-        filename: randomfileName + ".png",
+        filename: randomfileName + ".jpg",
         mimetype: mimetype,
         encoding: encoding,
       },
@@ -134,7 +134,7 @@ module.exports = {
 
     const pathName = path.join(
       __dirname,
-      `../../Images/ProfilePictures/${randomfileName}` + ".png"
+      `../../Images/ProfilePictures/${randomfileName}` + ".jpg"
     );
 
     console.log(pathName);
@@ -146,7 +146,7 @@ module.exports = {
     if (petInfo.typeOfAdoptedPet == "Gato") {
       if (
         (await scanCatPicture(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.png`
+          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         )) == false
       )
         throw new Error(
@@ -155,7 +155,7 @@ module.exports = {
     } else if (petInfo.typeOfAdoptedPet == "Perro") {
       if (
         (await scanDogPicture(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.png`
+          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         )) == false
       )
         throw new Error(
@@ -165,7 +165,7 @@ module.exports = {
 
     await AdoptedQuestionnarie.findByIdAndUpdate(id, {
       petPicture: {
-        filename: randomfileName + ".png",
+        filename: randomfileName + ".jpg",
         mimetype: mimetype,
         encoding: encoding,
       },
