@@ -12,6 +12,7 @@ const scanCatPicture = async (url) => {
   console.log(results);
   const labels = results[0].labelAnnotations;
   console.log("Labels:");
+  labels.forEach((label) => console.log(label.description));
   if (
     labels[0]?.description == "Cat" ||
     labels[0]?.description == "cat" ||
@@ -20,11 +21,10 @@ const scanCatPicture = async (url) => {
     labels[2]?.description == "Cat" ||
     labels[2]?.description == "cat"
   ) {
-    console.log("es mascota");
+    console.log("es gato");
     return true;
   }
-  labels.forEach((label) => console.log(label.description));
-  console.log("falso, no es mascota");
+  console.log("no es gato");
   return false;
 };
 
@@ -33,6 +33,7 @@ const scanDogPicture = async (url) => {
   console.log(results);
   const labels = results[0].labelAnnotations;
   console.log("Labels:");
+  labels.forEach((label) => console.log(label.description));
   if (
     labels[0]?.description == "Dog" ||
     labels[0]?.description == "dog" ||
@@ -41,11 +42,10 @@ const scanDogPicture = async (url) => {
     labels[2]?.description == "Dog" ||
     labels[2]?.description == "dog"
   ) {
-    console.log("es mascota");
+    console.log("es perro");
     return true;
   }
-  labels.forEach((label) => console.log(label.description));
-  console.log("falso, no es mascota");
+  console.log("no es perro");
   return false;
 };
 
@@ -149,14 +149,18 @@ module.exports = {
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.png`
         )) == false
       )
-        throw new Error("La imagen debe de ser de un gato");
+        throw new Error(
+          "Por favor, seleccione una imagen válida o inténtelo de nuevo."
+        );
     } else if (petInfo.typeOfAdoptedPet == "Perro") {
       if (
         (await scanDogPicture(
           `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.png`
         )) == false
       )
-        throw new Error("La imagen debe de ser de un gato");
+        throw new Error(
+          "Por favor, seleccione una imagen válida o inténtelo de nuevo."
+        );
     }
 
     await AdoptedQuestionnarie.findByIdAndUpdate(id, {
