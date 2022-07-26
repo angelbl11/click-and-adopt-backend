@@ -31,7 +31,7 @@ module.exports = {
 		});
 
 		if (ownerLikes) {
-			match(userId, petOwner.userId, petId);
+			await match(userId, petOwner.userId, petId);
 
 			await LikeUser.findOneAndDelete({
 				userId: petOwner.userId,
@@ -67,7 +67,7 @@ module.exports = {
 			const checkIfMatch = await AdoptedQuestionnarie.findById(item.petId);
 
 			if (checkIfMatch.userId == userId) {
-				match(adopterId.userId, userId, item.petId);
+				await match(adopterId.userId, userId, item.petId);
 
 				await Like.findOneAndDelete({
 					petId: item.petId,
@@ -85,5 +85,11 @@ module.exports = {
 		}).save();
 
 		return "like";
+	},
+
+	deleteMatch: async (p, { matchId }) => {
+		await Match.findByIdAndDelete(matchId);
+
+		return "deleted";
 	},
 };

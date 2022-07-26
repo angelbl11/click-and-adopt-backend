@@ -261,6 +261,7 @@ module.exports = {
         fileName: String!
       ): String!
       sendMessage(body: String!, to: ID!, userId: ID!): Messages
+      deleteMatch(matchId: String!): String!
     }
 
     type Subscription {
