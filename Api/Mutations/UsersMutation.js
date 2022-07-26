@@ -12,14 +12,10 @@ const scanCatPicture = async (url) => {
   console.log(results);
   const labels = results[0].labelAnnotations;
   console.log("Labels:");
-  labels.forEach((label) => console.log(label.description));
+  labels.forEach((label) => console.log(label.description, label.score));
   if (
-    labels[0]?.description == "Cat" ||
-    labels[0]?.description == "cat" ||
-    labels[1]?.description == "Cat" ||
-    labels[1]?.description == "cat" ||
-    labels[2]?.description == "Cat" ||
-    labels[2]?.description == "cat"
+    (labels[0]?.score >= 0.9 && labels[0]?.description == "Cat") ||
+    (labels[1]?.score >= 0.9 && labels[1]?.description == "cat")
   ) {
     console.log("es gato");
     return true;
@@ -35,12 +31,8 @@ const scanDogPicture = async (url) => {
   console.log("Labels:");
   labels.forEach((label) => console.log(label.description));
   if (
-    labels[0]?.description == "Dog" ||
-    labels[0]?.description == "dog" ||
-    labels[1]?.description == "Dog" ||
-    labels[1]?.description == "dog" ||
-    labels[2]?.description == "Dog" ||
-    labels[2]?.description == "dog"
+    (labels[0]?.score >= 0.9 && labels[0]?.description == "Dog") ||
+    (labels[1]?.score >= 0.9 && labels[1]?.description == "dog")
   ) {
     console.log("es perro");
     return true;
