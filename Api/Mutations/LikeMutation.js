@@ -21,7 +21,7 @@ module.exports = {
       if (petId == item.petId) throw new Error("Like repetido");
     });
 
-    if (likes.length > 10) throw new Error("Limite excedido");
+    if (likes.length > 10) throw new Error("Limite de likes excedido");
 
     const petOwner = await AdoptedQuestionnarie.findById(petId);
     const user = await AdopterQuestionnarie.findOne({ userId: userId });
