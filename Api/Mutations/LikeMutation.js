@@ -24,10 +24,10 @@ module.exports = {
     if (likes.length > 10) throw new Error("Limite excedido");
 
     const petOwner = await AdoptedQuestionnarie.findById(petId);
-
+    const user = await AdopterQuestionnarie.findOne({ userId: userId });
     const ownerLikes = await LikeUser.findOne({
       userId: petOwner.userId,
-      likedUserId: userId,
+      likedUserId: user.id,
     });
 
     if (ownerLikes) {
