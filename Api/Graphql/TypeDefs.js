@@ -144,6 +144,7 @@ module.exports = {
       hadPetsValue: String
       havePets: Boolean!
       isChildren: Boolean!
+      isAvailableToAdopt: Boolean
       numberOfCats: Int
       numberOfDogs: Int
       numberOfDays: Int
