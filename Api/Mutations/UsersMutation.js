@@ -175,7 +175,7 @@ module.exports = {
 
       const pathName = path.join(
         __dirname,
-        `../../Images/PetFiles/${fileName}`
+        `../../Uploads/ProtocolFiles/${fileName}`
       );
 
       await stream.pipe(fs.createWriteStream(pathName));
