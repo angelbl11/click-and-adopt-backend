@@ -80,7 +80,7 @@ module.exports = {
 
     if (
       (await detectFaces(
-        `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
+        `https://click-and-adopt.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
       )) == false
     ) {
       throw new Error(
@@ -138,7 +138,7 @@ module.exports = {
     if (petInfo.typeOfAdoptedPet == "Gato") {
       if (
         (await scanCatPicture(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
+          `https://click-and-adopt.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         )) == false
       )
         throw new Error(
@@ -147,7 +147,7 @@ module.exports = {
     } else if (petInfo.typeOfAdoptedPet == "Perro") {
       if (
         (await scanDogPicture(
-          `https://calm-forest-47055.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
+          `https://click-and-adopt.herokuapp.com/ProfilePictures/${randomfileName}.jpg`
         )) == false
       )
         throw new Error(
@@ -166,30 +166,26 @@ module.exports = {
     return "Listo";
   },
   addProtocolFile: async (parent, { id, protocolFile, fileName }) => {
-    try {
-      const { createReadStream, mimetype, encoding } = await protocolFile;
+    const { createReadStream, mimetype, encoding } = await protocolFile;
 
-      const { ext } = path.parse(fileName);
+    const { ext } = path.parse(fileName);
 
-      const stream = createReadStream();
+    const stream = createReadStream();
 
-      const pathName = path.join(
-        __dirname,
-        `../../Uploads/ProtocolFiles/${fileName}` + ".pdf"
-      );
+    const pathName = path.join(
+      __dirname,
+      `../../Uploads/ProtocolFiles/${fileName}`
+    );
 
-      await stream.pipe(fs.createWriteStream(pathName));
-      const user = await AdoptedQuestionnarie.findById(id);
-      user.petProtocol.push({
-        filename: fileName,
-        mimetype: mimetype,
-        encoding: encoding,
-      });
-      user.save();
-      return "Listo";
-    } catch (error) {
-      console.log(error);
-    }
+    await stream.pipe(fs.createWriteStream(pathName));
+    const user = await AdoptedQuestionnarie.findById(id);
+    user.petProtocol.push({
+      filename: fileName,
+      mimetype: mimetype,
+      encoding: encoding,
+    });
+    user.save();
+    return "Listo";
   },
   deletePetInfo: async (parent, { petId }) => {
     try {
