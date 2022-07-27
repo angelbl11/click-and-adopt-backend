@@ -49,6 +49,7 @@ const startServer = async () => {
   server.applyMiddleware({ app });
 
   app.use(express.static("Images"));
+  app.use(express.static("Uploads"));
 
   const PORT = process.env.PORT || 4000;
   httpServer.listen({ port: PORT }, () =>
