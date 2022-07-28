@@ -240,7 +240,7 @@ module.exports = {
         protocolFile: Upload!
         fileName: String!
       ): String!
-      sendMessage(body: String!, to: ID!, userId: ID!): Messages
+      sendMessage(body: String!, to: String!, userId: String!): Messages
       deleteMatch(matchId: String!): String!
     }
     type Subscription {
