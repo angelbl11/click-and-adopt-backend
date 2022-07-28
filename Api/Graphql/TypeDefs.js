@@ -208,6 +208,7 @@ module.exports = {
       getPetsTrashLikes(userId: String!): ReturnLike!
       getUsersTrashLikes(userId: String!): ReturnLikeUser!
       getMatches(userId: String!): [Match!]
+      getChat(userId: String!, partnerId: String!): [Messages!]
     }
     type Mutation {
       register(registerInput: RegisterInput!): User!
