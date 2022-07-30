@@ -7,6 +7,17 @@ module.exports = {
       email: String!
       password: String!
     }
+    input editPetInput {
+      adoptedPetName: String
+      ageOfAdoptedPet: String
+      genderOfAdoptedPet: String
+      typeOfAdoptedPet: String
+      adoptedPetDescription: String
+      adoptedPetProtocol: String
+      coexistenceWithOtherPets: [String]
+      isHealthyWithKids: Boolean
+      isHealthyWithOtherPets: Boolean
+    }
     input EditInput {
       email: String
       age: Int
@@ -223,6 +234,7 @@ module.exports = {
       addProfilePetPicture(id: String!, petProfilePicture: Upload!): String!
       deletePetInfo(petId: String!): String!
       editUserInfo(id: String!, editInput: EditInput!): String!
+      editPetInfo(petId: String!, editPetInput: editPetInput!): String!
       updateAdopterStatus(id: String!, userStatus: Boolean!): String!
       updateAdoptedStatus(id: String!, petStatus: Boolean!): String!
       likePet(petId: String!, userId: String!): String!
