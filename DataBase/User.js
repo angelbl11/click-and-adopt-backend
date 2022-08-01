@@ -32,6 +32,10 @@ const schema = new Schema({
     mimetype: String,
     encoding: String,
   },
+  expoToken: {
+    required: false,
+    type: String,
+  },
 });
 
 module.exports = {
