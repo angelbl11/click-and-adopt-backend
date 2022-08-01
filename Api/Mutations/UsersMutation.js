@@ -232,4 +232,10 @@ module.exports = {
       console.log(error);
     }
   },
+  addExpoToken: async (parent, { id, expoToken }) => {
+    await User.findByIdAndUpdate(id, {
+      expoToken: expoToken,
+    });
+    return "Token otorgado";
+  },
 };
