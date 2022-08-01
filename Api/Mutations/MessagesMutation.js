@@ -13,7 +13,7 @@ module.exports = {
       to: to,
       body: body,
     }).save();
-    const newChat = await Chat.find({
+    const isCreated = await Chat.findOne({
       $or: [
         { sender: userId },
         { receiver: to },
@@ -21,9 +21,11 @@ module.exports = {
         { receiver: userId },
       ],
     });
-    if (newChat) {
+
+    if (isCreated) {
+      throw new Error("Error, chat duplicado");
     } else {
-      new Chat({
+      await new Chat({
         sender: userId,
         receiver: to,
       }).save();
