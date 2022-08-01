@@ -102,6 +102,7 @@ module.exports = {
     await User.findByIdAndUpdate(id, {
       expoToken: expoToken,
     });
+    return "Token otorgado";
   },
 
   deletePetInfo: async (parent, { petId }) => {
