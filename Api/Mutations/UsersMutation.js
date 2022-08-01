@@ -239,13 +239,4 @@ module.exports = {
     });
     return "Token otorgado";
   },
-  deleteChat: async (parent, { chatId }) => {
-    try {
-      await Chat.findByIdAndDelete(chatId);
-
-      return "eliminado";
-    } catch (error) {
-      throw new Error(error);
-    }
-  },
 };

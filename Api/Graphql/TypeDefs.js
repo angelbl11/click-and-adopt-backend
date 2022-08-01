@@ -221,7 +221,6 @@ module.exports = {
       getUsersTrashLikes(userId: String!): ReturnLikeUser!
       getMatches(userId: String!): [Match!]
       getChat(userId: String!, partnerId: String!): [Messages!]
-      getChatList(userId: String!, partnerId: String!): [Chat!]
     }
     type Mutation {
       register(registerInput: RegisterInput!): User!
@@ -235,7 +234,6 @@ module.exports = {
       addProfilePicture(id: String!, profilePicture: Upload!): String!
       addProfilePetPicture(id: String!, petProfilePicture: Upload!): String!
       deletePetInfo(petId: String!): String!
-      deleteChat(chatId: String!): String!
       editUserInfo(id: String!, editInput: EditInput!): String!
       updateAdopterStatus(id: String!, userStatus: Boolean!): String!
       updateAdoptedStatus(id: String!, petStatus: Boolean!): String!
