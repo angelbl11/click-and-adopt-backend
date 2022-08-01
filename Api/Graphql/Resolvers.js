@@ -9,32 +9,36 @@ const LikeMutation = require("../Mutations/LikeMutation");
 const DislikeMutation = require("../Mutations/DislikeMutation");
 const LikesTrashMutation = require("../Mutations/LikesTrashMutation");
 const MatchesQueries = require("../Queries/MatchesQueries");
-const {messages, sendMessage} = require("../Mutations/MessagesMutation");
-
+const {
+  messages,
+  sendMessage,
+  pushNotifications,
+} = require("../Mutations/MessagesMutation");
 
 module.exports = {
-	resolvers: {
-		Upload: GraphQLUpload,
+  resolvers: {
+    Upload: GraphQLUpload,
 
-		Query: {
-			...UserQueries,
-			...RandomQueries,
-			...LikesQueries,
-			...MatchesQueries,
-		},
+    Query: {
+      ...UserQueries,
+      ...RandomQueries,
+      ...LikesQueries,
+      ...MatchesQueries,
+    },
 
-		Mutation: {
-			...AuthMutation,
-			...QuestionaireMutation,
-			...UserMutation,
-			...LikeMutation,
-			...DislikeMutation,
-			...LikesTrashMutation,
-			sendMessage
-		},
+    Mutation: {
+      ...AuthMutation,
+      ...QuestionaireMutation,
+      ...UserMutation,
+      ...LikeMutation,
+      ...DislikeMutation,
+      ...LikesTrashMutation,
+      sendMessage,
+    },
 
-		Subscription: {
-			messages
-		}
-	},
+    Subscription: {
+      messages,
+      pushNotifications,
+    },
+  },
 };

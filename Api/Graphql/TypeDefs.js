@@ -20,6 +20,10 @@ module.exports = {
       password: String!
       repeatPassword: String!
     }
+    type NotificationInfo {
+      senderUser: User!
+      receiverUser: User!
+    }
     input AdoptedQuestionnaireInput {
       userId: ID!
       adoptedPetName: String!
@@ -242,9 +246,11 @@ module.exports = {
       ): String!
       sendMessage(body: String!, to: String!, userId: String!): Messages
       deleteMatch(matchId: String!): String!
+      addExpoToken(id: String!, expoToken: String!): String!
     }
     type Subscription {
       messages(userId: String!): Messages!
+      pushNotifications(userId: String!): NotificationInfo!
     }
   `,
 };
