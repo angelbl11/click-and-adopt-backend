@@ -23,7 +23,6 @@ module.exports = {
     });
 
     if (isCreated) {
-      throw new Error("Error, chat duplicado");
     } else {
       await new Chat({
         sender: userId,
