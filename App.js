@@ -28,6 +28,7 @@ const startServer = async () => {
 
   const server = new ApolloServer({
     schema: schema,
+    introspection: true,
     plugins: [
       {
         async serverWillStart() {
