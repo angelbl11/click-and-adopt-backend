@@ -209,7 +209,6 @@ module.exports = {
       id: ID!
       receiver: String!
       sender: String!
-      chatInfo: Match!
     }
     type Query {
       getAdopterInfo(id: String!): AdopterInfo!
