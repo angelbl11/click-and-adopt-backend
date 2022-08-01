@@ -1,6 +1,7 @@
 const { User } = require("../../DataBase/User");
 const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
 const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
+const { Chat } = require("../../DataBase/Chat");
 const { CONFIG } = require("../../visionClient");
 const path = require("path");
 const fs = require("fs");
@@ -237,5 +238,14 @@ module.exports = {
       expoToken: expoToken,
     });
     return "Token otorgado";
+  },
+  deleteChat: async (parent, { chatId }) => {
+    try {
+      await Chat.findByIdAndDelete(chatId);
+
+      return "eliminado";
+    } catch (error) {
+      throw new Error(error);
+    }
   },
 };
