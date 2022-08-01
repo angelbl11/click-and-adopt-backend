@@ -85,7 +85,6 @@ module.exports = {
       email: String!
       fullName: String!
       password: String!
-      expoToken: String
       profilePicture: Picture
     }
     type AdoptedCuestionaire {
