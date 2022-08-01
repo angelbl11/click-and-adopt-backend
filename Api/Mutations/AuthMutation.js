@@ -27,7 +27,8 @@ module.exports = {
       user.email,
       user.account,
       user.age,
-      user.fullName
+      user.fullName,
+      user.expoToken
     );
 
     const userToReturn = {

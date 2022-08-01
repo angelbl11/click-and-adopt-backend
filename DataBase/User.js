@@ -33,7 +33,7 @@ const schema = new Schema({
     encoding: String,
   },
 
-  token: {
+  expoToken: {
     required: false,
     type: String,
   },

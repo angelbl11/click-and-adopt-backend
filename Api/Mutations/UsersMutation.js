@@ -98,6 +98,12 @@ module.exports = {
     return "Listo";
   },
 
+  addExpoToken: async (parent, { id, expoToken }) => {
+    await User.findByIdAndUpdate(id, {
+      expoToken: expoToken,
+    });
+  },
+
   deletePetInfo: async (parent, { petId }) => {
     try {
       await AdoptedQuestionnarie.findByIdAndDelete(petId);

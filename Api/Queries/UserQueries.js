@@ -2,6 +2,7 @@ const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
 const { AdopterQuestionnarie } = require("../../DataBase/AdopterQuestionnaire");
 const { User } = require("../../DataBase/User");
 const { Message } = require("../../DataBase/Messaje");
+const { Chat } = require("../../DataBase/Chat");
 module.exports = {
   getAdopterInfo: async (parent, { id }, context) => {
     try {
@@ -40,5 +41,12 @@ module.exports = {
       ],
     });
     return messages;
+  },
+  getChatList: async (parent, { userId, partnerId }) => {
+    const chatList = await Chat.find({
+      $or: [{ sender: userId } && { receiver: partnerId }],
+      $or: [{ sender: partnerId } && { receiver: userId }],
+    });
+    return chatList;
   },
 };

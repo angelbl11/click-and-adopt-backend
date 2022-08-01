@@ -85,7 +85,7 @@ module.exports = {
       email: String!
       fullName: String!
       password: String!
-      token: String
+      expoToken: String
       profilePicture: Picture
     }
     type AdoptedCuestionaire {
@@ -203,12 +203,25 @@ module.exports = {
       petOwnerInfo: User!
       petInvolved: AdoptedCuestionaire!
     }
+
+    type NotificationInfo {
+      senderUser: User!
+      receiverUser: User!
+    }
+
     type Messages {
       id: ID!
       from: String!
       to: String!
       body: String!
     }
+
+    type Chat {
+      id: ID!
+      receiver: String!
+      sender: String!
+    }
+
     type Query {
       getAdopterInfo(id: String!): AdopterInfo!
       getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
@@ -220,6 +233,7 @@ module.exports = {
       getUsersTrashLikes(userId: String!): ReturnLikeUser!
       getMatches(userId: String!): [Match!]
       getChat(userId: String!, partnerId: String!): [Messages!]
+      getChatList(userId: String!, partnerId: String!): [Chat!]
     }
     type Mutation {
       register(registerInput: RegisterInput!): User!
@@ -231,6 +245,7 @@ module.exports = {
       ): String!
       login(loginInput: LoginInput!): User!
       addProfilePicture(id: String!, profilePicture: Upload!): String!
+      addExpoToken(id: String!, expoToken: String!): String!
       addProfilePetPicture(id: String!, petProfilePicture: Upload!): String!
       deletePetInfo(petId: String!): String!
       editUserInfo(id: String!, editInput: EditInput!): String!
@@ -257,6 +272,7 @@ module.exports = {
     }
     type Subscription {
       messages(userId: String!): Messages!
+      pushNotifications(userId: String!): NotificationInfo!
     }
   `,
 };
