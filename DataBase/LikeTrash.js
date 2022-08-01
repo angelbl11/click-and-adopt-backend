@@ -1,24 +1,25 @@
 const { model, Schema } = require("mongoose");
 
 const schema = new Schema({
-	petId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "AdoptedQuestionnaire",
-	},
+  petId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "AdoptedQuestionnaire",
+  },
 
-	userId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "User",
-	},
+  userId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 
-	date: {
-		required: true,
-		type: String,
-	},
+  date: {
+    type: String,
+    default: Date.now,
+    expires: 2592000,
+  },
 });
 
 module.exports = {
-	LikeTrash: model("LikeTrash", schema),
+  LikeTrash: model("LikeTrash", schema),
 };

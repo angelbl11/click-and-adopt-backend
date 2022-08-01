@@ -1,24 +1,25 @@
 const { model, Schema } = require("mongoose");
 
 const schema = new Schema({
-	userId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "User",
-	},
+  userId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 
-	likedUserId: {
-		required: true,
-		type: Schema.Types.ObjectId,
-		ref: "AdopterQuestionnaire",
-	},
+  likedUserId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "AdopterQuestionnaire",
+  },
 
-	date: {
-		required: true,
-		type: String,
-	},
+  date: {
+    type: String,
+    default: Date.now,
+    expires: 2592000,
+  },
 });
 
 module.exports = {
-	LikeUser: model("LikeUser", schema),
+  LikeUser: model("LikeUser", schema),
 };

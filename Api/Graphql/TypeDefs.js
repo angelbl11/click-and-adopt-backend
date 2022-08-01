@@ -39,6 +39,18 @@ module.exports = {
       petProtocol: Upload
       isAvailableToBeAdopted: Boolean
     }
+    input editPetInput {
+      adoptedPetName: String
+      ageOfAdoptedPet: String
+      genderOfAdoptedPet: String
+      typeOfAdoptedPet: String
+      adoptedPetDescription: String
+      adoptedPetProtocol: String
+      coexistenceWithOtherPets: [String]
+      isHealthyWithKids: Boolean
+      isHealthyWithOtherPets: Boolean
+    }
+
     input AdopterQuestionnaireInput {
       userId: ID!
       haveDog: Boolean!
@@ -235,6 +247,7 @@ module.exports = {
       dislikeUser(userId: String!, likedUserId: String!): String!
       deleteLike(petId: String!, userId: String!): String!
       trashLike(petId: String!, userId: String!): String!
+      editPetInfo(petId: String!, editPetInput: editPetInput!): String!
       deleteLikeUser(userId: String!, likedUserId: String!): String!
       trashLikeUser(userId: String!, likedUserId: String!): String!
       reverseTrashLike(petId: String!, userId: String!): String!
