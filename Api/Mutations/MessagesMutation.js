@@ -1,6 +1,7 @@
 const { PubSub, withFilter } = require("graphql-subscriptions");
 const { Message } = require("../../DataBase/Messaje");
 const { User } = require("../../DataBase/User");
+const { Chat } = require("../../DataBase/Chat");
 const pubsub = new PubSub();
 
 module.exports = {
@@ -12,6 +13,22 @@ module.exports = {
       to: to,
       body: body,
     }).save();
+
+    const newChat = await Chat.find({
+      $or: [
+        { sender: userId },
+        { receiver: to },
+        { sender: to },
+        { receiver: userId },
+      ],
+    });
+    if (newChat) {
+    } else {
+      new Chat({
+        sender: userId,
+        receiver: to,
+      }).save();
+    }
 
     pubsub.publish("SHOW_MESSAGES", {
       messages: {
