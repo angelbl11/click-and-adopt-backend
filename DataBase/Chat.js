@@ -2,11 +2,13 @@ const { Schema, model } = require("mongoose");
 const schema = new Schema({
   sender: {
     required: true,
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User"
   },
   receiver: {
     required: true,
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User"
   },
 });
 

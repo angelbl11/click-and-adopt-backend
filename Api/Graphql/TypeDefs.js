@@ -214,6 +214,11 @@ module.exports = {
       to: String!
       body: String!
     }
+    type Chat {
+      id: ID!
+      receiver: User!
+      sender: User!
+    }
     type Query {
       getAdopterInfo(id: String!): AdopterInfo!
       getAdoptedInfo(id: String!): [AdoptedCuestionaire!]
@@ -225,6 +230,7 @@ module.exports = {
       getUsersTrashLikes(userId: String!): ReturnLikeUser!
       getMatches(userId: String!): [Match!]
       getChat(userId: String!, partnerId: String!): [Messages!]
+      getChatList(userId: String!, partnerId: String!): [Chat!]
     }
     type Mutation {
       register(registerInput: RegisterInput!): User!
