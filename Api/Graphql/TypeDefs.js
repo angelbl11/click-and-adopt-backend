@@ -271,6 +271,7 @@ module.exports = {
         petId: String!
       ): Messages
       deleteMatch(matchId: String!): String!
+      deleteChat(chatId: String!): String!
       addExpoToken(id: String!, expoToken: String!): String!
     }
     type Subscription {

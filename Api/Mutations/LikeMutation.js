@@ -92,4 +92,9 @@ module.exports = {
 
     return "Deleted";
   },
+
+  deleteChat: async (p, { chatId }) => {
+    await Chat.findByIdAndDelete(chatId);
+    return "Deleted";
+  },
 };
