@@ -1,4 +1,5 @@
 const { Like } = require("../../DataBase/Like");
+const { Chat } = require("../../DataBase/Chat");
 const { LikeUser } = require("../../DataBase/LikeUser");
 const { formatDate } = require("../../dateFormating");
 const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
