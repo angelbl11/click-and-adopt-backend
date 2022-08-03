@@ -23,7 +23,6 @@ module.exports = {
     type NotificationInfo {
       senderUser: User!
       receiverUser: User!
-      petInvolved: AdoptedCuestionaire!
     }
     input AdoptedQuestionnaireInput {
       userId: ID!
@@ -265,7 +264,12 @@ module.exports = {
         protocolFile: Upload!
         fileName: String!
       ): String!
-      sendMessage(body: String!, to: String!, userId: String!, petId: String!): Messages
+      sendMessage(
+        body: String!
+        to: String!
+        userId: String!
+        petId: String!
+      ): Messages
       deleteMatch(matchId: String!): String!
       addExpoToken(id: String!, expoToken: String!): String!
     }
