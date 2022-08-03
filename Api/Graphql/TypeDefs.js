@@ -23,6 +23,7 @@ module.exports = {
     type NotificationInfo {
       senderUser: User!
       receiverUser: User!
+      petInvolved: AdoptedCuestionaire!
     }
     input AdoptedQuestionnaireInput {
       userId: ID!
