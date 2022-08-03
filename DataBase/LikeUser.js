@@ -15,8 +15,6 @@ const schema = new Schema({
 
   date: {
     type: String,
-    default: Date.now,
-    expires: 2592000,
   },
 });
 
