@@ -34,10 +34,11 @@ module.exports = {
 		const likes = await Like.find({ userId: userId });
 		const dislikes = await Dislike.find({ userId: userId });
 		const trashLikes = await LikeTrash.find({ userId: userId });
-		const matches = await Match.find({ adopterInfo: userId });
+		const matches = await Match.find({ adopterInfo: userId }).populate(
+			"petOwnerInfo"
+		);
 		let pets = [];
 
-		console.log("hola");
 		for (const pref of user.petPreferences) {
 			for (const age of user.petAgePreferences) {
 				for (const gender of user.petGenderPreferences) {
@@ -46,7 +47,7 @@ module.exports = {
 						ageOfAdoptedPet: age,
 						genderOfAdoptedPet: gender,
 						typeOfAdoptedPet: pref,
-					});
+					}).populate("userId");
 
 					newPets.map((item) => {
 						let check = false;
@@ -63,7 +64,11 @@ module.exports = {
 						});
 
 						matches.map((matchItem) => {
-							if (matchItem.petInvolved == item.id)	check = true;
+							if (
+								matchItem.petInvolved == item.id ||
+								item.userId.id == matchItem.petOwnerInfo.id
+							)
+								check = true;
 						});
 
 						if (!check) pets.push(item);

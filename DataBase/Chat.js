@@ -10,6 +10,11 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User"
   },
+  petInvolved: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "AdoptedQuestionnaire"
+  }
 });
 
 module.exports = {

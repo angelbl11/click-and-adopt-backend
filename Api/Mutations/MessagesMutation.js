@@ -2,10 +2,11 @@ const { PubSub, withFilter } = require("graphql-subscriptions");
 const { Message } = require("../../DataBase/Messaje");
 const { User } = require("../../DataBase/User");
 const { Chat } = require("../../DataBase/Chat");
+const { AdoptedQuestionnarie } = require("../../DataBase/AdoptedQuestionnaire");
 const pubsub = new PubSub();
 
 module.exports = {
-	sendMessage: async (parent, { body, to, userId }) => {
+	sendMessage: async (parent, { body, to, userId, petId }) => {
 		if (!body) throw new Error("Mensaje vacio");
 
 		const newMessage = await new Message({
@@ -16,8 +17,8 @@ module.exports = {
 
 		const newChat = await Chat.findOne({
 			$or: [
-				{ sender: userId, receiver: to },
-				{ sender: to, receiver: userId },
+				{ sender: userId, receiver: to, petInvolved: petId },
+				{ sender: to, receiver: userId, petInvolved: petId },
 			],
 		});
 
@@ -25,9 +26,10 @@ module.exports = {
 			new Chat({
 				sender: userId,
 				receiver: to,
+				petInvolved: petId,
 			}).save();
 
-      console.log("chat creado")
+			console.log("chat creado");
 		}
 
 		pubsub.publish("SHOW_MESSAGES", {

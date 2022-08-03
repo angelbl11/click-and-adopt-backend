@@ -218,6 +218,7 @@ module.exports = {
       id: ID!
       receiver: User!
       sender: User!
+      petInvolved: AdoptedCuestionaire!
     }
     type Query {
       getAdopterInfo(id: String!): AdopterInfo!
@@ -263,7 +264,7 @@ module.exports = {
         protocolFile: Upload!
         fileName: String!
       ): String!
-      sendMessage(body: String!, to: String!, userId: String!): Messages
+      sendMessage(body: String!, to: String!, userId: String!, petId: String!): Messages
       deleteMatch(matchId: String!): String!
       addExpoToken(id: String!, expoToken: String!): String!
     }

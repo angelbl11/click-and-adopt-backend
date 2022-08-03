@@ -16,7 +16,10 @@ module.exports = {
 				{ sender: userId, receiver: partnerId },
 				{ sender: partnerId, receiver: userId },
 			],
-		}).populate("sender").populate("receiver");
+		})
+			.populate("sender")
+			.populate("receiver")
+			.populate("petInvolved");
 		return chatList;
 	},
 };
